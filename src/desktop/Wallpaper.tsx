@@ -1,4 +1,5 @@
 import { useSettings, type WallpaperId } from '../store/settings'
+import { useCustomWallpapers } from '../store/customWallpapers'
 
 interface Palette {
   sky: [string, string, string]
@@ -45,12 +46,43 @@ const STARS = Array.from({ length: 42 }, (_, i) => {
   return { x, y, r, delay, dur }
 })
 
-/** Soft dune landscape — pure SVG, palette from Settings, optionally alive. */
+/** Desktop wallpaper — a built-in SVG scene, or a user-added image/video. */
 export function Wallpaper() {
   const id = useSettings((s) => s.wallpaper)
   const live = useSettings((s) => s.liveWallpaper)
   const reduceMotion = useSettings((s) => s.reduceMotion)
-  const { p } = WALLPAPERS[id] ?? WALLPAPERS.dusk
+  const custom = useCustomWallpapers((s) =>
+    id.startsWith('custom:') ? s.items.find((i) => `custom:${i.id}` === id) : undefined,
+  )
+
+  if (id.startsWith('custom:')) {
+    // while IndexedDB is still loading (or the item was deleted), fall back to dusk
+    if (custom) {
+      return custom.type.startsWith('video/') ? (
+        <video
+          key={custom.id}
+          src={custom.url}
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay={!reduceMotion}
+          loop
+          muted
+          playsInline
+          aria-hidden
+        />
+      ) : (
+        <img
+          key={custom.id}
+          src={custom.url}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          aria-hidden
+        />
+      )
+    }
+    return <WallpaperSvg p={WALLPAPERS.dusk.p} live={false} className="absolute inset-0 h-full w-full" />
+  }
+
+  const { p } = WALLPAPERS[id as WallpaperId] ?? WALLPAPERS.dusk
   return <WallpaperSvg p={p} live={live && !reduceMotion} className="absolute inset-0 h-full w-full" />
 }
 

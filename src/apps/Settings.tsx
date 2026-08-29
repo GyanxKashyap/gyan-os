@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSettings, ACCENTS, type WallpaperId } from '../store/settings'
+import { useCustomWallpapers } from '../store/customWallpapers'
 import { WALLPAPERS, WallpaperSvg } from '../desktop/Wallpaper'
 
 export function SettingsApp() {
@@ -45,6 +46,8 @@ export function SettingsApp() {
               </button>
             ))}
           </div>
+
+          <CustomWallpapers active={wallpaper} onSelect={setWallpaper} />
 
           <div className="mt-3 flex items-center justify-between">
             <div>
@@ -115,6 +118,76 @@ export function SettingsApp() {
           </p>
         </div>
       </section>
+    </div>
+  )
+}
+
+function CustomWallpapers({ active, onSelect }: { active: string; onSelect: (id: string) => void }) {
+  const items = useCustomWallpapers((s) => s.items)
+  const add = useCustomWallpapers((s) => s.add)
+  const remove = useCustomWallpapers((s) => s.remove)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  return (
+    <div className="mt-3">
+      <p className="text-[12.5px] font-medium">My wallpapers</p>
+      <p className="text-[11px] text-ink-soft">
+        Add any image or video from your computer — videos play as live wallpapers. Saved in Gyan OS.
+      </p>
+      <div className="mt-2 flex flex-wrap gap-3">
+        {items.map((w) => {
+          const id = `custom:${w.id}`
+          return (
+            <div key={w.id} className="group relative">
+              <button
+                onClick={() => onSelect(id)}
+                className={`block overflow-hidden rounded-xl border-2 transition-colors ${
+                  active === id ? 'border-lavender-deep' : 'border-transparent hover:border-black/15'
+                }`}
+                aria-label={`Wallpaper: ${w.name}`}
+                title={w.name}
+              >
+                {w.type.startsWith('video/') ? (
+                  <video src={w.url} className="h-14 w-24 object-cover" muted playsInline preload="metadata" />
+                ) : (
+                  <img src={w.url} alt="" className="h-14 w-24 object-cover" />
+                )}
+                <span className="block max-w-24 truncate bg-white/60 px-1 py-0.5 text-center text-[10.5px] font-medium text-ink-soft">
+                  {w.name}
+                </span>
+              </button>
+              <button
+                onClick={() => remove(w.id)}
+                aria-label={`Delete wallpaper ${w.name}`}
+                className="absolute -right-1.5 -top-1.5 hidden h-5 w-5 items-center justify-center rounded-full bg-plum text-cream shadow group-hover:flex"
+              >
+                <svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3" strokeLinecap="round" fill="none">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+            </div>
+          )
+        })}
+        <button
+          onClick={() => fileRef.current?.click()}
+          className="flex h-[76px] w-24 flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-black/15 text-ink-soft transition-colors hover:border-lavender-deep/60 hover:text-ink"
+          aria-label="Add wallpaper"
+        >
+          <span className="text-[18px] leading-none">+</span>
+          <span className="text-[10.5px] font-medium">Add</span>
+        </button>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*,video/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0]
+            if (f) add(f)
+            e.target.value = ''
+          }}
+        />
+      </div>
     </div>
   )
 }

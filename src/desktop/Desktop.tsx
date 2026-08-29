@@ -10,6 +10,7 @@ import { MenuPanel, type MenuEntry } from './Menu'
 import { useWindows } from '../store/windows'
 import { useSettings, type WallpaperId } from '../store/settings'
 import { useNotifications } from '../store/notifications'
+import { useCustomWallpapers } from '../store/customWallpapers'
 
 export function Desktop() {
   const windows = useWindows((s) => s.windows)
@@ -43,6 +44,11 @@ export function Desktop() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  // restore user-added wallpapers from IndexedDB
+  useEffect(() => {
+    useCustomWallpapers.getState().load()
   }, [])
 
   // one welcome notification per session, reporting the real model status

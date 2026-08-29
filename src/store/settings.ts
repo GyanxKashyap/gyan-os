@@ -12,11 +12,12 @@ export const ACCENTS = [
 ] as const
 
 interface SettingsStore {
-  wallpaper: WallpaperId
+  /** a built-in WallpaperId, or `custom:<id>` for a user-added wallpaper */
+  wallpaper: string
   accent: string
   reduceMotion: boolean
   liveWallpaper: boolean
-  setWallpaper: (w: WallpaperId) => void
+  setWallpaper: (w: string) => void
   setAccent: (c: string) => void
   setReduceMotion: (v: boolean) => void
   setLiveWallpaper: (v: boolean) => void
