@@ -6,6 +6,8 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
+    // listen on all interfaces (IPv4 + IPv6) — Safari resolves localhost to ::1
+    host: true,
     // honor the port assigned by the dev-server launcher (falls back to 5173)
     port: Number(process.env.PORT) || 5173,
     proxy: {
