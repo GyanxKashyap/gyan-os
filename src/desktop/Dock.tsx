@@ -18,10 +18,10 @@ export function Dock() {
       onMouseMove={(e) => mouseX.set(e.clientX)}
       onMouseLeave={() => mouseX.set(Infinity)}
     >
-      <div className="glass flex items-end gap-2 rounded-[22px] px-3 pb-2 pt-2 shadow-[0_12px_40px_-8px_rgba(40,25,70,0.35)]">
+      <div className="chrome-glass flex items-end gap-2 rounded-[22px] px-3 pb-2 pt-2 shadow-[0_12px_40px_-8px_rgba(40,25,70,0.35)]">
         {APPS.map((app) => (
           <div key={app.id} className="flex items-end gap-2">
-            {app.id === 'trash' && <span className="mb-1 h-10 w-px self-end bg-black/10" />}
+            {app.id === 'trash' && <span className="dock-sep mb-1 h-10 w-px self-end bg-black/10" />}
             <DockItem app={app} mouseX={mouseX} />
           </div>
         ))}
@@ -59,7 +59,7 @@ function DockItem({ app, mouseX }: { app: AppDef; mouseX: MotionValue<number> })
         <FullIcon icon={app.icon} accent={app.accent} />
       </motion.span>
       <span
-        className={`absolute -bottom-1.5 h-1 w-1 rounded-full bg-plum/70 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+        className={`dock-dot absolute -bottom-1.5 h-1 w-1 rounded-full bg-plum/70 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0'}`}
       />
     </motion.button>
   )

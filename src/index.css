@@ -47,6 +47,33 @@ body,
     0 4px 16px rgba(30, 20, 50, 0.18);
 }
 
+/* OS chrome (menu bar + dock) — more transparent than window glass, and it
+   follows the wallpaper: .chrome-dark on the desktop root flips it to dark. */
+.chrome-glass {
+  background: rgba(250, 247, 244, 0.5);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: background-color 0.5s ease, border-color 0.5s ease;
+}
+.chrome-dark .chrome-glass {
+  background: rgba(24, 20, 32, 0.42);
+  border-color: rgba(255, 255, 255, 0.14);
+  --color-ink: #f2eef7;
+  --color-ink-soft: #bdb6c9;
+}
+/* dropdown menus opened from dark chrome go dark too */
+.chrome-dark .chrome-glass .glass {
+  background: rgba(36, 31, 47, 0.92);
+  border-color: rgba(255, 255, 255, 0.13);
+}
+.chrome-dark .chrome-glass .dock-dot {
+  background: rgba(242, 238, 247, 0.85);
+}
+.chrome-dark .chrome-glass .dock-sep {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 /* Live wallpaper — slow, GPU-cheap transform/opacity loops.
    Only .wp-live animates; the static wallpaper renders the same frame. */
 @keyframes wp-sway-1 {

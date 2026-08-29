@@ -17,6 +17,13 @@ export function Desktop() {
   const order = useWindows((s) => s.order)
   const accent = useSettings((s) => s.accent)
   const reduceMotion = useSettings((s) => s.reduceMotion)
+  const wallpaperId = useSettings((s) => s.wallpaper)
+  const chromeDark = useCustomWallpapers((s) => {
+    if (wallpaperId.startsWith('custom:')) {
+      return s.items.find((i) => `custom:${i.id}` === wallpaperId)?.isDark ?? false
+    }
+    return Boolean(WALLPAPERS[wallpaperId as WallpaperId]?.p.night)
+  })
   const [searchOpen, setSearchOpen] = useState(false)
   const [ctx, setCtx] = useState<{ x: number; y: number } | null>(null)
 
@@ -78,7 +85,7 @@ export function Desktop() {
 
   return (
     <div
-      className={`relative h-full w-full overflow-hidden ${reduceMotion ? 'motion-off' : ''}`}
+      className={`relative h-full w-full overflow-hidden ${reduceMotion ? 'motion-off' : ''} ${chromeDark ? 'chrome-dark' : ''}`}
       style={{ '--color-lavender-deep': accent } as React.CSSProperties}
       onContextMenu={(e) => {
         // custom menu only on the bare desktop, not inside windows/dock/menus

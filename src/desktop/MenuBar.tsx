@@ -95,9 +95,9 @@ export function MenuBar({ onSearch }: { onSearch: () => void }) {
   return (
     <header
       ref={barRef}
-      className="glass absolute inset-x-0 top-0 z-[5000] flex h-[34px] items-center gap-1 border-x-0 border-t-0 px-3 text-[13px] whitespace-nowrap"
+      className="chrome-glass absolute inset-x-0 top-0 z-[5000] flex h-[34px] items-center gap-1 border-x-0 border-t-0 px-3 text-[13px] whitespace-nowrap"
     >
-      <span className="px-2 font-semibold tracking-tight">Gyan OS</span>
+      <span className="px-2 font-semibold tracking-tight text-ink">Gyan OS</span>
       {activeTitle && <span className="px-1 font-medium text-ink">{activeTitle}</span>}
       {Object.keys(menus).map((m) => (
         <div key={m} className="relative">
