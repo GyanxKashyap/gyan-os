@@ -6,6 +6,8 @@ interface Palette {
   sun: string
   dunes: [[string, string], [string, string], [string, string]]
   night?: boolean
+  /** dominant color for chrome tinting */
+  tint: [number, number, number]
 }
 
 export const WALLPAPERS: Record<WallpaperId, { label: string; p: Palette }> = {
@@ -15,6 +17,7 @@ export const WALLPAPERS: Record<WallpaperId, { label: string; p: Palette }> = {
       sky: ['#e9e0f4', '#e3d3e8', '#f0d9c9'],
       sun: '#fdf3e3',
       dunes: [['#cfc0e2', '#b7a6d4'], ['#b3a0cd', '#9784ba'], ['#8b78ab', '#6f5f92']],
+      tint: [151, 132, 186],
     },
   },
   dawn: {
@@ -23,6 +26,7 @@ export const WALLPAPERS: Record<WallpaperId, { label: string; p: Palette }> = {
       sky: ['#fdeee2', '#f6ddd2', '#eed4da'],
       sun: '#fff7ea',
       dunes: [['#f0cbb4', '#e4b39a'], ['#dfa98f', '#cd9179'], ['#b97f6d', '#996657']],
+      tint: [205, 145, 121],
     },
   },
   night: {
@@ -31,6 +35,7 @@ export const WALLPAPERS: Record<WallpaperId, { label: string; p: Palette }> = {
       sky: ['#3d3654', '#4a4066', '#5d4d6e'],
       sun: '#8d7fb5',
       dunes: [['#524a6e', '#453e60'], ['#403856', '#342d48'], ['#2b2440', '#1f1a30']],
+      tint: [111, 95, 146],
       night: true,
     },
   },

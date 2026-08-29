@@ -18,12 +18,24 @@ export function Desktop() {
   const accent = useSettings((s) => s.accent)
   const reduceMotion = useSettings((s) => s.reduceMotion)
   const wallpaperId = useSettings((s) => s.wallpaper)
-  const chromeDark = useCustomWallpapers((s) => {
+  const theme = useCustomWallpapers((s) => {
     if (wallpaperId.startsWith('custom:')) {
-      return s.items.find((i) => `custom:${i.id}` === wallpaperId)?.isDark ?? false
+      return s.items.find((i) => `custom:${i.id}` === wallpaperId)?.theme
     }
-    return Boolean(WALLPAPERS[wallpaperId as WallpaperId]?.p.night)
+    const p = WALLPAPERS[wallpaperId as WallpaperId]?.p ?? WALLPAPERS.dusk.p
+    return { isDark: Boolean(p.night), tint: p.tint }
   })
+  const chromeDark = theme?.isDark ?? false
+  const tint = theme?.tint ?? WALLPAPERS.dusk.p.tint
+
+  // chrome glass tinted toward the wallpaper's dominant color
+  const mix = (base: number[], t: number) => base.map((b, i) => Math.round(b + (tint[i] - b) * t))
+  const chromeBg = chromeDark
+    ? `rgba(${mix([24, 20, 32], 0.38).join(',')}, 0.45)`
+    : `rgba(${mix([250, 247, 244], 0.22).join(',')}, 0.5)`
+  const chromeMenuBg = chromeDark
+    ? `rgba(${mix([36, 31, 47], 0.32).join(',')}, 0.92)`
+    : `rgba(${mix([250, 247, 244], 0.14).join(',')}, 0.88)`
   const [searchOpen, setSearchOpen] = useState(false)
   const [ctx, setCtx] = useState<{ x: number; y: number } | null>(null)
 
@@ -86,7 +98,13 @@ export function Desktop() {
   return (
     <div
       className={`relative h-full w-full overflow-hidden ${reduceMotion ? 'motion-off' : ''} ${chromeDark ? 'chrome-dark' : ''}`}
-      style={{ '--color-lavender-deep': accent } as React.CSSProperties}
+      style={
+        {
+          '--color-lavender-deep': accent,
+          '--chrome-bg': chromeBg,
+          '--chrome-menu-bg': chromeMenuBg,
+        } as React.CSSProperties
+      }
       onContextMenu={(e) => {
         // custom menu only on the bare desktop, not inside windows/dock/menus
         if ((e.target as HTMLElement).closest('[role="dialog"], nav, header, [role="menu"]')) return
