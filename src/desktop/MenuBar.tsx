@@ -1,4 +1,41 @@
 import { useEffect, useRef, useState } from 'react'
+
+interface BatteryManager extends EventTarget {
+  level: number
+  charging: boolean
+}
+
+/** Real system status: online/offline + battery (where the browser exposes it). */
+function useSystemStatus() {
+  const [online, setOnline] = useState(navigator.onLine)
+  const [battery, setBattery] = useState<{ level: number; charging: boolean } | null>(null)
+
+  useEffect(() => {
+    const up = () => setOnline(true)
+    const down = () => setOnline(false)
+    window.addEventListener('online', up)
+    window.addEventListener('offline', down)
+
+    let bat: BatteryManager | undefined
+    const sync = () => bat && setBattery({ level: bat.level, charging: bat.charging })
+    const getBattery = (navigator as Navigator & { getBattery?: () => Promise<BatteryManager> }).getBattery
+    getBattery?.call(navigator).then((b) => {
+      bat = b
+      sync()
+      b.addEventListener('levelchange', sync)
+      b.addEventListener('chargingchange', sync)
+    })
+
+    return () => {
+      window.removeEventListener('online', up)
+      window.removeEventListener('offline', down)
+      bat?.removeEventListener('levelchange', sync)
+      bat?.removeEventListener('chargingchange', sync)
+    }
+  }, [])
+
+  return { online, battery }
+}
 import { useWindows } from '../store/windows'
 import { useSettings } from '../store/settings'
 import { appById } from '../lib/apps'
@@ -13,6 +50,7 @@ export function MenuBar({ onSearch }: { onSearch: () => void }) {
   const order = useWindows((s) => s.order)
   const windows = useWindows((s) => s.windows)
   const settings = useSettings()
+  const { online, battery } = useSystemStatus()
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 10_000)
@@ -131,17 +169,42 @@ export function MenuBar({ onSearch }: { onSearch: () => void }) {
           <path d="m20 20-4.8-4.8" />
         </svg>
       </button>
-      <span className="p-1.5 text-ink-soft" title="Wi-Fi" aria-label="Wi-Fi">
+      <span
+        className={`p-1.5 ${online ? 'text-ink-soft' : 'text-ink-soft/40'}`}
+        title={online ? 'Internet: connected' : 'Internet: offline'}
+        aria-label={online ? 'Internet connected' : 'Internet offline'}
+      >
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
           <path d="M3 9.5C8.5 4.5 15.5 4.5 21 9.5M6 13c3.5-3 8.5-3 12 0M9.2 16.4c1.7-1.4 3.9-1.4 5.6 0" />
           <circle cx="12" cy="19.2" r="1.1" fill="currentColor" stroke="none" />
+          {!online && <path d="M4 4l16 16" strokeWidth="2.2" />}
         </svg>
       </span>
-      <span className="p-1.5 text-ink-soft" title="Battery" aria-label="Battery">
+      <span
+        className="flex items-center gap-1 p-1.5 text-ink-soft"
+        title={
+          battery
+            ? `Battery: ${Math.round(battery.level * 100)}%${battery.charging ? ' — charging' : ''}`
+            : 'Battery status not available in this browser'
+        }
+        aria-label={battery ? `Battery ${Math.round(battery.level * 100)} percent` : 'Battery'}
+      >
+        {battery && <span className="text-[11px] tabular-nums">{Math.round(battery.level * 100)}%</span>}
         <svg width="20" height="15" viewBox="0 0 28 14" fill="none" stroke="currentColor" strokeWidth="1.6">
           <rect x="1" y="2" width="22" height="10" rx="3" />
-          <rect x="3" y="4" width="15" height="6" rx="1.5" fill="currentColor" stroke="none" />
+          <rect
+            x="3"
+            y="4"
+            width={battery ? Math.max(1.5, 18 * battery.level) : 18}
+            height="6"
+            rx="1.5"
+            fill={battery && !battery.charging && battery.level <= 0.2 ? '#e8756d' : 'currentColor'}
+            stroke="none"
+          />
           <path d="M25 5.5v3" strokeLinecap="round" strokeWidth="2" />
+          {battery?.charging && (
+            <path d="M13.5 3 10 8h3l-1.5 4L16 6.5h-3z" fill="#f7f2ec" stroke="#5c5566" strokeWidth="0.8" strokeLinejoin="round" />
+          )}
         </svg>
       </span>
       <span className="px-2 font-medium tabular-nums text-ink">
