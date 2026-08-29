@@ -4,8 +4,38 @@ interface Props {
   size?: number
 }
 
-/** Original rounded-tile icon with a simple line glyph per app. */
+/** Custom icon images: drop `<id>.png` (or .jpg/.webp) into src/assets/icons/
+    — e.g. aizen.png, projects.png, about.png, lab.png, knowledge.png,
+    settings.png, trash.png — and that app switches from the drawn glyph to
+    the image everywhere (desktop, dock, windows, search). */
+const ICON_IMAGES: Record<string, string> = {}
+for (const [path, url] of Object.entries(
+  import.meta.glob('../assets/icons/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' }) as Record<string, string>,
+)) {
+  const name = path.split('/').pop()!.replace(/\.[^.]+$/, '')
+  ICON_IMAGES[name] = url
+}
+
+/** Rounded-tile app icon — a custom image when provided, else a drawn glyph. */
 export function AppIcon({ icon, accent, size = 52 }: Props) {
+  const img = ICON_IMAGES[icon]
+  if (img) {
+    return (
+      <img
+        src={img}
+        alt=""
+        width={size}
+        height={size}
+        draggable={false}
+        aria-hidden
+        className="rounded-[23.4%] object-cover"
+      />
+    )
+  }
+  return <DrawnIcon icon={icon} accent={accent} size={size} />
+}
+
+function DrawnIcon({ icon, accent, size = 52 }: Props) {
   return (
     <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden>
       <defs>

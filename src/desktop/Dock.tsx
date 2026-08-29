@@ -109,7 +109,7 @@ function DockItem({ app, mouseX }: { app: AppDef; mouseX: MotionValue<number> })
 /** AppIcon stretched to fill the animated square. */
 function FullIcon({ icon, accent }: { icon: string; accent: string }) {
   return (
-    <div className="h-full w-full [&>svg]:h-full [&>svg]:w-full">
+    <div className="h-full w-full [&>img]:h-full [&>img]:w-full [&>svg]:h-full [&>svg]:w-full">
       <AppIcon icon={icon} accent={accent} />
     </div>
   )
