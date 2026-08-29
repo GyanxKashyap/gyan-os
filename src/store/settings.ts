@@ -15,9 +15,11 @@ interface SettingsStore {
   wallpaper: WallpaperId
   accent: string
   reduceMotion: boolean
+  liveWallpaper: boolean
   setWallpaper: (w: WallpaperId) => void
   setAccent: (c: string) => void
   setReduceMotion: (v: boolean) => void
+  setLiveWallpaper: (v: boolean) => void
 }
 
 export const useSettings = create<SettingsStore>()(
@@ -26,9 +28,11 @@ export const useSettings = create<SettingsStore>()(
       wallpaper: 'dusk',
       accent: '#8d7fb5',
       reduceMotion: false,
+      liveWallpaper: true,
       setWallpaper: (wallpaper) => set({ wallpaper }),
       setAccent: (accent) => set({ accent }),
       setReduceMotion: (reduceMotion) => set({ reduceMotion }),
+      setLiveWallpaper: (liveWallpaper) => set({ liveWallpaper }),
     }),
     { name: 'gyan-os-settings' },
   ),

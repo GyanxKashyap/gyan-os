@@ -59,6 +59,11 @@ export function MenuBar({ onSearch }: { onSearch: () => void }) {
       })),
       { divider: true },
       {
+        label: 'Live wallpaper',
+        checked: settings.liveWallpaper && !settings.reduceMotion,
+        action: () => settings.setLiveWallpaper(!settings.liveWallpaper),
+      },
+      {
         label: 'Animations',
         checked: !settings.reduceMotion,
         action: () => settings.setReduceMotion(!settings.reduceMotion),

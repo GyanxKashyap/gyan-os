@@ -47,6 +47,39 @@ body,
     0 4px 16px rgba(30, 20, 50, 0.18);
 }
 
+/* Live wallpaper — slow, GPU-cheap transform/opacity loops.
+   Only .wp-live animates; the static wallpaper renders the same frame. */
+@keyframes wp-sway-1 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-60px); }
+}
+@keyframes wp-sway-2 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(45px); }
+}
+@keyframes wp-sway-3 {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-30px); }
+}
+@keyframes wp-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.07); opacity: 0.85; }
+}
+@keyframes wp-mist-drift {
+  0%, 100% { transform: translateX(0); opacity: 1; }
+  50% { transform: translateX(120px); opacity: 0.55; }
+}
+@keyframes wp-twinkle {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.9; }
+}
+.wp-live .wp-dune-1 { animation: wp-sway-1 46s ease-in-out infinite; }
+.wp-live .wp-dune-2 { animation: wp-sway-2 34s ease-in-out infinite; }
+.wp-live .wp-dune-3 { animation: wp-sway-3 26s ease-in-out infinite; }
+.wp-live .wp-sun { animation: wp-breathe 14s ease-in-out infinite; transform-origin: 1090px 340px; }
+.wp-live .wp-mist { animation: wp-mist-drift 38s ease-in-out infinite; }
+.wp-live .wp-star { animation: wp-twinkle 3s ease-in-out infinite; }
+
 /* Settings → Animations off */
 .motion-off *,
 .motion-off *::before,

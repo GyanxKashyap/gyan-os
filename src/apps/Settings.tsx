@@ -3,7 +3,10 @@ import { useSettings, ACCENTS, type WallpaperId } from '../store/settings'
 import { WALLPAPERS, WallpaperSvg } from '../desktop/Wallpaper'
 
 export function SettingsApp() {
-  const { wallpaper, accent, reduceMotion, setWallpaper, setAccent, setReduceMotion } = useSettings()
+  const {
+    wallpaper, accent, reduceMotion, liveWallpaper,
+    setWallpaper, setAccent, setReduceMotion, setLiveWallpaper,
+  } = useSettings()
   const [aizenStatus, setAizenStatus] = useState<'checking' | 'online' | 'offline'>('checking')
 
   useEffect(() => {
@@ -41,6 +44,14 @@ export function SettingsApp() {
                 </span>
               </button>
             ))}
+          </div>
+
+          <div className="mt-3 flex items-center justify-between">
+            <div>
+              <p className="text-[12.5px] font-medium">Live wallpaper</p>
+              <p className="text-[11.5px] text-ink-soft">Drifting dunes, breathing light{wallpaper === 'night' ? ', twinkling stars' : ''}</p>
+            </div>
+            <Toggle on={liveWallpaper && !reduceMotion} onChange={setLiveWallpaper} label="Live wallpaper" />
           </div>
 
           <p className="mt-4 text-[12.5px] font-medium">Accent</p>
