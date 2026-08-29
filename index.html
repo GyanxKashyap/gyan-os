@@ -14,6 +14,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // diagnostic: surface any startup crash as visible text instead of a black screen
+      window.addEventListener('error', (e) => {
+        if (document.getElementById('root')?.childElementCount) return
+        document.body.insertAdjacentHTML(
+          'beforeend',
+          '<pre style="color:#ff8080;background:#1a1420;padding:16px;font-size:13px;white-space:pre-wrap;position:fixed;inset:auto 0 0 0;z-index:99999">GYAN OS failed to start: ' +
+            (e.message || e.type) + '\n' + (e.filename || '') + ':' + (e.lineno || '') + '</pre>',
+        )
+      })
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

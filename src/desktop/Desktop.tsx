@@ -18,15 +18,16 @@ export function Desktop() {
   const accent = useSettings((s) => s.accent)
   const reduceMotion = useSettings((s) => s.reduceMotion)
   const wallpaperId = useSettings((s) => s.wallpaper)
-  const theme = useCustomWallpapers((s) => {
-    if (wallpaperId.startsWith('custom:')) {
-      return s.items.find((i) => `custom:${i.id}` === wallpaperId)?.theme
-    }
-    const p = WALLPAPERS[wallpaperId as WallpaperId]?.p ?? WALLPAPERS.dusk.p
-    return { isDark: Boolean(p.night), tint: p.tint }
-  })
-  const chromeDark = theme?.isDark ?? false
-  const tint = theme?.tint ?? WALLPAPERS.dusk.p.tint
+  // Select only stable references from the store; deriving a fresh object inside
+  // the selector makes useSyncExternalStore re-render forever (max update depth).
+  const customTheme = useCustomWallpapers((s) =>
+    wallpaperId.startsWith('custom:')
+      ? s.items.find((i) => `custom:${i.id}` === wallpaperId)?.theme
+      : undefined,
+  )
+  const builtin = WALLPAPERS[wallpaperId as WallpaperId]?.p ?? WALLPAPERS.dusk.p
+  const chromeDark = customTheme?.isDark ?? Boolean(builtin.night)
+  const tint = customTheme?.tint ?? builtin.tint
 
   // chrome glass tinted toward the wallpaper's dominant color
   const mix = (base: number[], t: number) => base.map((b, i) => Math.round(b + (tint[i] - b) * t))
