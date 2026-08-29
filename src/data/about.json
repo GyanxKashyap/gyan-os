@@ -1,0 +1,49 @@
+{
+  "name": "Gyan",
+  "role": "Student · Builder",
+  "location": "Ghazipur, India",
+  "age": 18,
+  "intro": "I really like to discover and build. That's why, instead of calling an API, I built a language model from scratch — every layer, the tokenizer, the training loop, all of it, on my own laptop.",
+  "now": "Right now my studies come first: I'm preparing for JEE-Mains to get into college next year. Building happens around them — one project, one experiment at a time.",
+  "interests": ["AI", "Algorithms", "Game dev", "Gaming", "Physics", "Cinema"],
+  "skills": {
+    "strong": [
+      { "name": "Python", "note": "my best language — Aizen is built with it" },
+      { "name": "HTML & CSS", "note": "most of my apps and games ship with it" }
+    ],
+    "working": [{ "name": "JavaScript", "note": "games, apps and experiments" }],
+    "familiar": ["TypeScript", "React", "PyTorch", "Rust / Tauri", "Three.js"]
+  },
+  "journey": [
+    {
+      "title": "First contact",
+      "detail": "Started coding in 7th class — and honestly, didn't like it. Writing programs felt like a chore, and I drifted away."
+    },
+    {
+      "title": "The comeback",
+      "detail": "Years later I tried again — and this time it clicked. I became genuinely fond of building things, and the journey properly started."
+    },
+    {
+      "title": "Building in public",
+      "detail": "One project at a time: games, study timers, a prompt library, an AR experiment, a 3D AI assistant — 11 projects, each one teaching something new."
+    },
+    {
+      "title": "Aizen",
+      "detail": "The big one — a language model built completely from scratch in PyTorch. Two months from a character-level toy to a pretrained 16M-parameter model with its own BPE tokenizer and benchmark."
+    },
+    {
+      "title": "Now",
+      "detail": "Preparing for JEE-Mains while keeping the builder's flame alive. College next year; the projects continue."
+    }
+  ],
+  "achievements": [
+    {
+      "title": "Trained a 16M-parameter LLM from scratch",
+      "detail": "In a span of two months — custom Transformer, from-scratch BPE tokenizer, TinyStories pretraining, all on a MacBook. Benchmark score grew from 17% to 45.25% on a frozen 400-question eval."
+    },
+    {
+      "title": "Built and shipped 11 projects while learning",
+      "detail": "Games, productivity apps, AI experiments and this OS itself — each one finished, published, and used."
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "categories": ["AI", "Machine Learning", "Programming", "Game Development", "Space", "Experiments"],
+  "notes": [
+    {
+      "id": "eval-first",
+      "title": "Measure before you improve",
+      "category": "Machine Learning",
+      "date": "2026-08-28",
+      "related": ["Aizen"],
+      "content": [
+        "Before touching Aizen's training, I built the measuring stick: a frozen set of 400 questions across 8 categories — arithmetic, multi-step, logic, patterns, general knowledge, instruction following, reading, coding — and an eval.py that scores any checkpoint the same way, every time.",
+        "Two rules made it work. The eval is frozen: I never tweak questions to make a model look better. And one training run per approved experiment: no quietly re-running until the number goes up.",
+        "The payoff was immediate. v0 scored 17% — an honest, slightly painful baseline. But every improvement after that was real, because the ruler never changed."
+      ]
+    },
+    {
+      "id": "finetune-seesaw",
+      "title": "Fine-tuning a tiny model is whack-a-mole",
+      "category": "Machine Learning",
+      "date": "2026-08-28",
+      "related": ["Aizen"],
+      "content": [
+        "Phase 3 taught me that a 14M-parameter model has no spare capacity. Fine-tuning with an answer-masked loss (only the answer tokens count toward the loss) lifted the score from 17% to 26.5% — but categories moved against each other.",
+        "Fixing multi-step arithmetic hurt plain arithmetic. A targeted-fix dataset (Phase 3b) brought arithmetic back from 72 to 86 but dropped multi-step from 56 to 44. A see-saw.",
+        "Lesson: at this scale, every gradient step is a trade. You need per-category measurement to even see the trades you're making — a single overall number hides them."
+      ]
+    },
+    {
+      "id": "bpe-scratch",
+      "title": "Writing a BPE tokenizer from scratch",
+      "category": "AI",
+      "date": "2026-08-28",
+      "related": ["Aizen"],
+      "content": [
+        "Character-level models spend most of their capacity learning to spell. So I wrote byte-pair encoding from scratch — no libraries: count adjacent pairs, merge the most frequent, repeat to a 2048-token vocabulary.",
+        "Two design choices mattered more than the algorithm: digits stay single tokens (so arithmetic doesn't break on weird merges like '45' becoming one token), and newlines never merge (so the Q/A structure stays visible).",
+        "Retrained from scratch with the new tokenizer and a 512-token context, the same-size model jumped from 28.75% to 35.75%. Representation is leverage: identical parameters, better spent."
+      ]
+    },
+    {
+      "id": "pretraining-matters",
+      "title": "Why pretraining matters even at 16M params",
+      "category": "Machine Learning",
+      "date": "2026-08-29",
+      "related": ["Aizen"],
+      "content": [
+        "Aizen kept failing logic questions not because it couldn't reason, but because it couldn't read — it had only ever seen Q&A pairs, never flowing English.",
+        "So: 103MB of TinyStories, cleaned to ASCII, tokenized to 26.2M tokens with a 4096-vocab BPE, pretrained overnight for 16k steps as a plain language model. Then a short 2.5k-step masked-QA fine-tune on top.",
+        "Logic went from 12% to 66%. Overall: 35.75% → 45.25%. The pretrained model even writes coherent little stories. Comprehension comes from reading, not from flashcards — true for models, probably for people too."
+      ]
+    },
+    {
+      "id": "one-file-model",
+      "title": "A language model is smaller than you think",
+      "category": "AI",
+      "date": "2026-08-27",
+      "related": ["Aizen"],
+      "content": [
+        "The whole of Aizen — attention, MLP blocks, embeddings, the training loop — is a handful of readable Python files. No framework magic: model.py defines the Transformer, a training script feeds it batches, a checkpoint file carries weights, vocab and config together.",
+        "Building it demystified every buzzword. 'Attention' is a few matrix multiplications. 'Context length' is an array size. 'Training' is a loop that nudges numbers.",
+        "If you can write Python and have a laptop, you can build a language model. It won't be GPT — mine is charmingly wrong about 63 + 26 sometimes — but you'll understand what GPT actually is."
+      ]
+    },
+    {
+      "id": "building-gyan-os",
+      "title": "Building an OS-shaped portfolio",
+      "category": "Programming",
+      "date": "2026-08-29",
+      "related": ["Gyan OS"],
+      "content": [
+        "A portfolio is a claim about what you can build — so the site itself should be evidence. Gyan OS is a desktop: menu bar, dock with magnification, draggable windows with real z-ordering, apps.",
+        "The interesting engineering is state: a window manager is just a store mapping app ids to geometry plus a z-counter, and everything else is springs and pointer events.",
+        "Rule I kept from Aizen: no fake data. The benchmark numbers in the Aizen app are the real eval results, and the chat talks to the real model running on my machine — when it's offline, it says so."
+      ]
+    }
+  ]
+}

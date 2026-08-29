@@ -1,0 +1,105 @@
+{
+  "model": {
+    "name": "Aizen",
+    "version": "v3",
+    "checkpoint": "aizen_phase5.pt",
+    "params": "~16M parameters",
+    "specs": [
+      { "label": "Architecture", "value": "Decoder-only Transformer, built from scratch in PyTorch" },
+      { "label": "Layers", "value": "8 Transformer layers" },
+      { "label": "Embedding", "value": "384 dimensions" },
+      { "label": "Attention heads", "value": "6" },
+      { "label": "Tokenizer", "value": "From-scratch BPE, 4096 vocab" },
+      { "label": "Context", "value": "512 tokens" },
+      { "label": "Hardware", "value": "MacBook (Apple M5, PyTorch MPS) — no cloud, no pretrained weights" },
+      { "label": "Constraint", "value": "Hard cap 30–50M params — all gains from data, tokenizer & training recipes" }
+    ]
+  },
+  "benchmark": {
+    "note": "Frozen 400-question eval (eval.py) — never re-tuned against. One training run per approved experiment.",
+    "versions": [
+      {
+        "id": "v0",
+        "checkpoint": "aizen.pt",
+        "score": 17.0,
+        "label": "Original char-level QA model (14.3M)",
+        "categories": { "arithmetic": 78, "multi-step": 2, "logic": 0, "patterns": 0, "general knowledge": 48, "instruction": 8, "reading": 0, "coding": 0 }
+      },
+      {
+        "id": "v1",
+        "checkpoint": "aizen_phase3.pt",
+        "score": 26.5,
+        "label": "Phase-3 fine-tune (answer-masked loss)",
+        "categories": { "arithmetic": 72, "multi-step": 56, "logic": 0, "patterns": 14, "general knowledge": 52, "instruction": 14, "reading": 4, "coding": 0 }
+      },
+      {
+        "id": "v1b",
+        "checkpoint": "aizen_phase3b.pt",
+        "score": 28.75,
+        "label": "Phase-3b targeted-fix dataset",
+        "categories": { "arithmetic": 86, "multi-step": 44, "logic": 10, "patterns": 14, "general knowledge": 48, "instruction": 12, "reading": 16, "coding": 0 }
+      },
+      {
+        "id": "v2",
+        "checkpoint": "aizen_phase4.pt",
+        "score": 35.75,
+        "label": "From-scratch BPE tokenizer + 512 context",
+        "categories": { "arithmetic": 92, "multi-step": 60, "logic": 12, "patterns": 4, "general knowledge": 48, "instruction": 32, "reading": 38, "coding": 0 }
+      },
+      {
+        "id": "v3",
+        "checkpoint": "aizen_phase5.pt",
+        "score": 45.25,
+        "label": "TinyStories pretraining + masked-QA fine-tune — current",
+        "categories": { "arithmetic": 90, "multi-step": 54, "logic": 66, "patterns": 10, "general knowledge": 58, "instruction": 38, "reading": 44, "coding": 2 }
+      }
+    ]
+  },
+  "phases": [
+    {
+      "id": 1,
+      "name": "Evaluation",
+      "objective": "Build a fixed measuring stick before improving anything.",
+      "work": "A frozen 400-question eval set across 8 categories (arithmetic, multi-step, logic, patterns, general knowledge, instruction following, reading, coding) plus eval.py, which scores any checkpoint the same way every time.",
+      "outcome": "Baseline measured: v0 scored 17.0%. The eval was frozen — it is never re-tuned against.",
+      "lesson": "You can't improve what you can't measure. Every later phase is judged by this one file."
+    },
+    {
+      "id": 2,
+      "name": "Dataset",
+      "objective": "Teach reasoning, not just recall.",
+      "work": "A 10k-example reasoning dataset (aizen_phase2_train.txt) with multi-step arithmetic, logic and instruction-following formats, generated synthetically and validated.",
+      "outcome": "The training corpus for Phase 3.",
+      "lesson": "Data quality moves a small model more than anything else — capacity is too scarce to waste on noise."
+    },
+    {
+      "id": 3,
+      "name": "Training",
+      "objective": "Fine-tune without destroying what the model already knew.",
+      "work": "train_phase3.py: answer-masked loss (only answer tokens count), example-aligned windows, 70/30 new/old data mix. A follow-up 5k targeted-fix dataset (Phase 3b) attacked the specific failure cases.",
+      "outcome": "17.0% → 26.5% (v1) → 28.75% (v1b). Fixes came with regressions — a see-saw between categories.",
+      "lesson": "Fine-tuning a tiny model is whack-a-mole: every fix can break something else. Measure everything."
+    },
+    {
+      "id": 4,
+      "name": "BPE",
+      "objective": "Stop wasting the model on spelling.",
+      "work": "A BPE tokenizer written from scratch (tokenizer.py): 2048 merges, digits kept as single tokens, full printable-ASCII base — plus a context extension from 192 to 512 tokens and a full scratch retrain.",
+      "outcome": "35.75% (v2). Reading comprehension jumped from 16 → 38, instruction following 12 → 32.",
+      "lesson": "Representation matters. The same parameters go much further when they don't have to learn characters."
+    },
+    {
+      "id": 5,
+      "name": "Pretraining",
+      "objective": "Give the model English before asking it questions.",
+      "work": "103MB of TinyStories cleaned to ASCII, a 4096-vocab tokenizer v2, 26.2M tokens pretrained for 16k steps as a plain language model, then a 2.5k-step masked-QA fine-tune.",
+      "outcome": "45.25% (v3) — current best. Logic exploded from 12 → 66; the pretrained model writes coherent stories.",
+      "lesson": "Pretraining is not optional, even at 16M params. Comprehension comes from reading, not from Q&A pairs."
+    }
+  ],
+  "roadmap": [
+    { "phase": 6, "name": "Consolidation fine-tune", "status": "planned", "detail": "Patterns data for BPE, 3-digit arithmetic, multi-step reinforcement. Target: 50%+." },
+    { "phase": 7, "name": "Multi-turn conversation", "status": "planned", "detail": "Dialogue data + chat history in the UI — the 512 context supports it." },
+    { "phase": 8, "name": "Aizen-50M finale", "status": "planned", "detail": "12 layers / 512 dim, overnight pretraining on more TinyStories. The hard cap stays." }
+  ]
+}
