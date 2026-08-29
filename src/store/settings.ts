@@ -17,10 +17,12 @@ interface SettingsStore {
   accent: string
   reduceMotion: boolean
   liveWallpaper: boolean
+  dockAutoHide: boolean
   setWallpaper: (w: string) => void
   setAccent: (c: string) => void
   setReduceMotion: (v: boolean) => void
   setLiveWallpaper: (v: boolean) => void
+  setDockAutoHide: (v: boolean) => void
 }
 
 export const useSettings = create<SettingsStore>()(
@@ -30,10 +32,12 @@ export const useSettings = create<SettingsStore>()(
       accent: '#8d7fb5',
       reduceMotion: false,
       liveWallpaper: true,
+      dockAutoHide: true,
       setWallpaper: (wallpaper) => set({ wallpaper }),
       setAccent: (accent) => set({ accent }),
       setReduceMotion: (reduceMotion) => set({ reduceMotion }),
       setLiveWallpaper: (liveWallpaper) => set({ liveWallpaper }),
+      setDockAutoHide: (dockAutoHide) => set({ dockAutoHide }),
     }),
     { name: 'gyan-os-settings' },
   ),

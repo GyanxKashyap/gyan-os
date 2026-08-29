@@ -5,8 +5,8 @@ import { WALLPAPERS, WallpaperSvg } from '../desktop/Wallpaper'
 
 export function SettingsApp() {
   const {
-    wallpaper, accent, reduceMotion, liveWallpaper,
-    setWallpaper, setAccent, setReduceMotion, setLiveWallpaper,
+    wallpaper, accent, reduceMotion, liveWallpaper, dockAutoHide,
+    setWallpaper, setAccent, setReduceMotion, setLiveWallpaper, setDockAutoHide,
   } = useSettings()
   const [aizenStatus, setAizenStatus] = useState<'checking' | 'online' | 'offline'>('checking')
 
@@ -71,6 +71,14 @@ export function SettingsApp() {
                 style={{ background: a.color }}
               />
             ))}
+          </div>
+
+          <div className="mt-4 flex items-center justify-between">
+            <div>
+              <p className="text-[12.5px] font-medium">Automatically hide the Dock</p>
+              <p className="text-[11.5px] text-ink-soft">Slides away when idle; bottom edge brings it back</p>
+            </div>
+            <Toggle on={dockAutoHide} onChange={setDockAutoHide} label="Automatically hide the Dock" />
           </div>
 
           <div className="mt-4 flex items-center justify-between">

@@ -1,32 +1,73 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from 'motion/react'
 import { APPS, type AppDef } from '../lib/apps'
 import { AppIcon } from './AppIcon'
 import { useWindows } from '../store/windows'
+import { useSettings } from '../store/settings'
 
-const BASE = 52
-const MAX = 76
-const RANGE = 130
+const BASE = 44
+const MAX = 64
+const RANGE = 120
 
 export function Dock() {
   const mouseX = useMotionValue(Infinity)
+  const autoHide = useSettings((s) => s.dockAutoHide)
+  const [shown, setShown] = useState(true)
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+
+  const cancelHide = () => clearTimeout(hideTimer.current)
+  const scheduleHide = (delay = 700) => {
+    if (!autoHide) return
+    cancelHide()
+    hideTimer.current = setTimeout(() => setShown(false), delay)
+  }
+  const reveal = () => {
+    cancelHide()
+    setShown(true)
+  }
+
+  useEffect(() => {
+    if (!autoHide) {
+      cancelHide()
+      setShown(true)
+      return
+    }
+    scheduleHide(1600) // settle in, then tuck away
+    return cancelHide
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoHide])
 
   return (
-    <nav
-      aria-label="Dock"
-      className="absolute inset-x-0 bottom-3 z-[4000] flex justify-center"
-      onMouseMove={(e) => mouseX.set(e.clientX)}
-      onMouseLeave={() => mouseX.set(Infinity)}
-    >
-      <div className="chrome-glass flex items-end gap-2 rounded-[22px] px-3 pb-2 pt-2 shadow-[0_12px_40px_-8px_rgba(40,25,70,0.35)]">
-        {APPS.map((app) => (
-          <div key={app.id} className="flex items-end gap-2">
-            {app.id === 'trash' && <span className="dock-sep mb-1 h-10 w-px self-end bg-black/10" />}
-            <DockItem app={app} mouseX={mouseX} />
-          </div>
-        ))}
-      </div>
-    </nav>
+    <>
+      {/* invisible reveal strip along the bottom edge */}
+      {autoHide && (
+        <div className="absolute inset-x-0 bottom-0 z-[3999] h-3" onMouseEnter={reveal} aria-hidden />
+      )}
+      <motion.nav
+        aria-label="Dock"
+        className="absolute inset-x-0 bottom-2 z-[4000] flex justify-center"
+        animate={{ y: shown ? 0 : 110, opacity: shown ? 1 : 0 }}
+        transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
+        onMouseEnter={reveal}
+        onMouseMove={(e) => {
+          reveal()
+          mouseX.set(e.clientX)
+        }}
+        onMouseLeave={() => {
+          mouseX.set(Infinity)
+          scheduleHide()
+        }}
+      >
+        <div className="chrome-glass flex items-end gap-3 rounded-[20px] px-6 pb-1.5 pt-1.5 shadow-[0_12px_40px_-8px_rgba(40,25,70,0.35)]">
+          {APPS.map((app) => (
+            <div key={app.id} className="flex items-end gap-3">
+              {app.id === 'trash' && <span className="dock-sep mb-1 h-8 w-px self-end bg-black/10" />}
+              <DockItem app={app} mouseX={mouseX} />
+            </div>
+          ))}
+        </div>
+      </motion.nav>
+    </>
   )
 }
 
