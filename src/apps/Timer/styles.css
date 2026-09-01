@@ -1,3 +1,12 @@
+.timer-app-shell {
+  container-type: size;
+  container-name: timerapp;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
 .timer-app-root {
   color: #1c1c1b;
   background: #d3d2cf;
@@ -29,7 +38,7 @@
 .timer-app-root {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100cqh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -53,7 +62,7 @@
 }
 
 .timer-app-root .loading-screen, .timer-app-root .app-shell {
-  min-height: 100dvh;
+  min-height: 100cqh;
 }
 
 .timer-app-root .loading-screen {
@@ -97,10 +106,10 @@
 .timer-app-root .primary-nav {
   position: absolute;
   z-index: 4;
-  top: clamp(44px, 6.8vh, 96px);
-  left: clamp(26px, 3.1vw, 54px);
+  top: clamp(44px, 6.8cqh, 96px);
+  left: clamp(26px, 3.1cqw, 54px);
   display: flex;
-  width: 43.2vw;
+  width: 43.2cqw;
   gap: 44px;
   border-bottom: 1px solid var(--line);
 }
@@ -145,7 +154,7 @@
 }
 
 .timer-app-root .view-notes .primary-nav {
-  width: 29.5vw;
+  width: 29.5cqw;
   min-width: 365px;
   gap: 38px;
 }
@@ -154,7 +163,7 @@
   position: relative;
   z-index: 2;
   display: grid;
-  min-height: 100dvh;
+  min-height: 100cqh;
   place-items: center;
   padding: 132px 24px 52px;
 }
@@ -183,7 +192,7 @@
 
 .timer-app-root .about-header h1 {
   margin: 9px 0 0;
-  font-size: clamp(22px, 2vw, 30px);
+  font-size: clamp(22px, 2cqw, 30px);
   font-weight: 500;
   letter-spacing: 0.04em;
 }
@@ -210,7 +219,7 @@
 }
 
 .timer-app-root .about-qr-frame {
-  width: min(228px, 68vw);
+  width: min(228px, 68cqw);
   aspect-ratio: 1;
   padding: 13px;
   border: 1px solid rgba(238, 43, 35, 0.48);
@@ -258,19 +267,19 @@
   position: relative;
   z-index: 2;
   display: flex;
-  min-height: 100dvh;
+  min-height: 100cqh;
   align-items: flex-start;
-  padding: clamp(170px, 20vh, 290px) 0 48px clamp(26px, 2.7vw, 56px);
+  padding: clamp(170px, 20cqh, 290px) 0 48px clamp(26px, 2.7cqw, 56px);
   transition: opacity 160ms ease;
 }
 
 .timer-app-root .timer-panel {
-  width: 43.5vw;
+  width: 43.5cqw;
 }
 
 .timer-app-root .session-label {
   margin: 0 0 20px 2px;
-  font-size: clamp(13px, 1vw, 16px);
+  font-size: clamp(13px, 1cqw, 16px);
   letter-spacing: 0.055em;
 }
 
@@ -305,7 +314,7 @@
 .timer-app-root .flip-clock {
   display: flex;
   width: 100%;
-  height: clamp(220px, 30.8vh, 430px);
+  height: clamp(220px, 30.8cqh, 430px);
   align-items: stretch;
   gap: 12px;
   padding: 16px;
@@ -336,7 +345,7 @@
   color: #deddd9;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035);
   font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-  font-size: clamp(100px, 15vw, 285px);
+  font-size: clamp(100px, 15cqw, 285px);
   font-stretch: condensed;
   font-weight: 300;
   line-height: 0.8;
@@ -384,7 +393,7 @@
   place-items: center;
   color: #d5d4d0;
   font-family: "Arial Narrow", Arial, sans-serif;
-  font-size: clamp(76px, 9vw, 180px);
+  font-size: clamp(76px, 9cqw, 180px);
   font-weight: 300;
   line-height: 1;
 }
@@ -425,7 +434,7 @@
   border: 0;
   background: transparent;
   cursor: pointer;
-  font-size: clamp(17px, 1.55vw, 24px);
+  font-size: clamp(17px, 1.55cqw, 24px);
 }
 
 .timer-app-root .duration-options button::after {
@@ -483,7 +492,7 @@
   background: #1c1c1b;
   color: var(--accent);
   cursor: pointer;
-  font-size: clamp(20px, 1.7vw, 27px);
+  font-size: clamp(20px, 1.7cqw, 27px);
   letter-spacing: 0.16em;
 }
 
@@ -577,7 +586,7 @@
   max-width: 620px;
   margin: 0;
   font-family: "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
-  font-size: clamp(42px, 5vw, 74px);
+  font-size: clamp(42px, 5cqw, 74px);
   font-weight: 300;
   letter-spacing: -0.035em;
   line-height: 0.98;
@@ -620,7 +629,7 @@
   z-index: 5;
   top: 0;
   right: 0;
-  height: 100dvh;
+  height: 100cqh;
   overflow: hidden;
   border-radius: var(--radius-large) 0 0 var(--radius-large);
   background: var(--panel);
@@ -629,11 +638,11 @@
 }
 
 .timer-app-root .analysis-panel.is-compact {
-  width: clamp(340px, 25.7vw, 510px);
+  width: clamp(340px, 25.7cqw, 510px);
 }
 
 .timer-app-root .analysis-panel.is-expanded {
-  width: min(68vw, 980px);
+  width: min(68cqw, 980px);
   animation: analysis-surface-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -696,7 +705,7 @@
 .timer-app-root .analysis-scroll {
   height: 100%;
   overflow: auto;
-  padding: clamp(34px, 4.9vh, 54px) clamp(22px, 2vw, 34px) 38px;
+  padding: clamp(34px, 4.9cqh, 54px) clamp(22px, 2cqw, 34px) 38px;
   scrollbar-color: #555 #1d1d1d;
   scrollbar-width: thin;
 }
@@ -851,7 +860,7 @@
   display: flex;
   height: 176px;
   align-items: flex-end;
-  gap: clamp(8px, 1.25vw, 20px);
+  gap: clamp(8px, 1.25cqw, 20px);
   overflow-x: auto;
   padding: 22px 8px 0;
   border-bottom: 1px solid var(--panel-line);
@@ -1179,8 +1188,8 @@
   position: relative;
   z-index: 2;
   display: grid;
-  min-height: 100dvh;
-  grid-template-columns: minmax(390px, 34vw) minmax(0, 1fr);
+  min-height: 100cqh;
+  grid-template-columns: minmax(390px, 34cqw) minmax(0, 1fr);
   background: #d1d0cc;
   animation: notes-surface-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -1204,8 +1213,8 @@
 
 .timer-app-root .note-composer-inner {
   width: min(100%, 510px);
-  min-height: 100dvh;
-  padding: clamp(152px, 17vh, 194px) clamp(30px, 3.6vw, 58px) 42px;
+  min-height: 100cqh;
+  padding: clamp(152px, 17cqh, 194px) clamp(30px, 3.6cqw, 58px) 42px;
 }
 
 .timer-app-root .note-composer-heading {
@@ -1237,10 +1246,10 @@
 .timer-app-root .note-composer textarea {
   display: block;
   width: 100%;
-  height: clamp(250px, 37vh, 380px);
+  height: clamp(250px, 37cqh, 380px);
   margin-top: 18px;
   resize: vertical;
-  padding: clamp(24px, 2.5vw, 38px);
+  padding: clamp(24px, 2.5cqw, 38px);
   border: 1px solid rgba(54, 53, 50, 0.14);
   border-radius: 2px;
   color: #2a2a28;
@@ -1335,9 +1344,9 @@
 
 .timer-app-root .notes-wall {
   min-width: 0;
-  min-height: 100dvh;
+  min-height: 100cqh;
   overflow-y: auto;
-  padding: clamp(46px, 6vh, 68px) clamp(28px, 3.3vw, 54px) 60px;
+  padding: clamp(46px, 6cqh, 68px) clamp(28px, 3.3cqw, 54px) 60px;
   border-radius: var(--radius-large) 0 0 var(--radius-large);
   background: #181818;
   color: var(--panel-text);
@@ -1349,8 +1358,8 @@
 .timer-app-root .notes-grid {
   display: grid;
   align-items: start;
-  padding-top: clamp(90px, 13vh, 145px);
-  gap: clamp(24px, 2.7vw, 42px);
+  padding-top: clamp(90px, 13cqh, 145px);
+  gap: clamp(24px, 2.7cqw, 42px);
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
@@ -1401,7 +1410,7 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: space-between;
-  padding: clamp(22px, 2.1vw, 34px);
+  padding: clamp(22px, 2.1cqw, 34px);
   border: 0;
   background: transparent;
   color: inherit;
@@ -1413,7 +1422,7 @@
   display: -webkit-box;
   overflow: hidden;
   font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  font-size: clamp(15px, 1.2vw, 19px);
+  font-size: clamp(15px, 1.2cqw, 19px);
   line-height: 1.55;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -1434,7 +1443,7 @@
 }
 
 .timer-app-root .sticky-note-details {
-  padding: 0 clamp(22px, 2.1vw, 34px) 24px;
+  padding: 0 clamp(22px, 2.1cqw, 34px) 24px;
   border-top: 1px solid rgba(39, 39, 36, 0.23);
 }
 
@@ -1488,7 +1497,7 @@
 
 .timer-app-root .notes-empty-state {
   display: grid;
-  min-height: calc(100dvh - 150px);
+  min-height: calc(100cqh - 150px);
   place-items: center;
   color: #6f6e69;
   font-size: 11px;
@@ -1496,7 +1505,7 @@
 }
 
 .timer-app-root .storage-warning {
-  position: fixed;
+  position: absolute;
   z-index: 20;
   right: 24px;
   bottom: 22px;
@@ -1511,11 +1520,11 @@
 }
 
 .timer-app-root .focus-mode .timer-stage {
-  padding-top: clamp(150px, 18vh, 250px);
+  padding-top: clamp(150px, 18cqh, 250px);
 }
 
 .timer-app-root .focus-mode .timer-panel {
-  width: min(47vw, 900px);
+  width: min(47cqw, 900px);
 }
 
 @keyframes minute-flip {
@@ -1528,13 +1537,13 @@
   transform-origin: center;
 }
 
-@media (max-width: 1100px) {
+@container timerapp (max-width: 1100px) {
   .timer-app-root .analysis-panel.is-compact {
     width: 330px;
   }
 
   .timer-app-root .timer-panel, .timer-app-root .primary-nav {
-    width: calc(100vw - 390px);
+    width: calc(100cqw - 390px);
     max-width: 630px;
   }
 
@@ -1547,11 +1556,11 @@
   }
 
   .timer-app-root .analysis-panel.is-expanded {
-    width: 76vw;
+    width: 76cqw;
   }
 
   .timer-app-root .notes-workspace {
-    grid-template-columns: minmax(350px, 38vw) minmax(0, 1fr);
+    grid-template-columns: minmax(350px, 38cqw) minmax(0, 1fr);
   }
 
   .timer-app-root .notes-grid {
@@ -1559,9 +1568,9 @@
   }
 }
 
-@media (max-width: 820px) {
+@container timerapp (max-width: 820px) {
   .timer-app-root .app-shell {
-    min-height: 100dvh;
+    min-height: 100cqh;
     overflow-y: auto;
     background-position: 58% center;
   }
@@ -1578,11 +1587,11 @@
     position: absolute;
     top: 28px;
     left: 22px;
-    width: calc(100vw - 44px);
+    width: calc(100cqw - 44px);
   }
 
   .timer-app-root .timer-stage {
-    min-height: 100dvh;
+    min-height: 100cqh;
     padding: 132px 22px 42px;
   }
 
@@ -1592,21 +1601,21 @@
   }
 
   .timer-app-root .flip-clock {
-    height: clamp(200px, 34vh, 300px);
+    height: clamp(200px, 34cqh, 300px);
   }
 
   .timer-app-root .flip-digit {
-    font-size: clamp(72px, 19vw, 132px);
+    font-size: clamp(72px, 19cqw, 132px);
   }
 
   .timer-app-root .analysis-panel.is-expanded {
-    position: fixed;
-    width: 100vw;
+    position: absolute;
+    width: 100cqw;
     border-radius: 0;
   }
 
   .timer-app-root .view-notes .primary-nav {
-    width: calc(100vw - 44px);
+    width: calc(100cqw - 44px);
     min-width: 0;
   }
 
@@ -1616,7 +1625,7 @@
 
   .timer-app-root .notes-workspace {
     display: block;
-    min-height: 100dvh;
+    min-height: 100cqh;
   }
 
   .timer-app-root .note-composer-inner {
@@ -1659,7 +1668,7 @@
   }
 }
 
-@media (max-width: 560px) {
+@container timerapp (max-width: 560px) {
   .timer-app-root .app-shell {
     background-position: 62% center;
   }
@@ -1682,7 +1691,7 @@
 
   .timer-app-root .flip-digit {
     border-radius: 10px;
-    font-size: clamp(58px, 18.5vw, 92px);
+    font-size: clamp(58px, 18.5cqw, 92px);
   }
 
   .timer-app-root .flip-colon {
@@ -1721,7 +1730,7 @@
   }
 
   .timer-app-root .about-qr-frame {
-    width: min(210px, 66vw);
+    width: min(210px, 66cqw);
   }
 
   .timer-app-root .note-composer-inner {
@@ -1791,7 +1800,7 @@
 
 }
 
-@media (max-width: 380px) {
+@container timerapp (max-width: 380px) {
   .timer-app-root .primary-nav button {
     min-width: 44px;
     font-size: 12px;
