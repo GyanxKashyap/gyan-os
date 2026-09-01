@@ -58,10 +58,10 @@ export function Dock() {
           scheduleHide()
         }}
       >
-        <div className="chrome-glass flex items-end gap-1 rounded-[20px] px-2 pb-1.5 pt-1.5 shadow-[0_12px_40px_-8px_rgba(40,25,70,0.35)]">
+        <div className="chrome-glass flex items-end gap-5 rounded-[22px] px-6 pb-2 pt-2 shadow-[0_12px_40px_-8px_rgba(40,25,70,0.35)]">
           {APPS.map((app) => (
-            <div key={app.id} className="flex items-end gap-1">
-              {app.id === 'trash' && <span className="dock-sep mx-1 mb-1 h-8 w-px self-end bg-black/10" />}
+            <div key={app.id} className="flex items-end gap-5">
+              {app.id === 'trash' && <span className="dock-sep mb-1 h-9 w-px self-end bg-black/10" />}
               <DockItem app={app} mouseX={mouseX} />
             </div>
           ))}
