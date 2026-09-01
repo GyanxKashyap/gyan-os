@@ -6,6 +6,9 @@
   "intro": "I really like to discover and build. That's why, instead of calling an API, I built a language model from scratch — every layer, the tokenizer, the training loop, all of it, on my own laptop.",
   "now": "Right now my studies come first: I'm preparing for JEE-Mains to get into college next year. Building happens around them — one project, one experiment at a time.",
   "interests": ["AI", "Algorithms", "Game dev", "Gaming", "Physics", "Cinema"],
+  "contacts": [
+    { "label": "GitHub", "value": "GyanxKashyap", "href": "https://github.com/GyanxKashyap", "icon": "github" }
+  ],
   "skills": {
     "strong": [
       { "name": "Python", "note": "my best language — Aizen is built with it" },
