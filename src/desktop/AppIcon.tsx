@@ -4,10 +4,27 @@ interface Props {
   size?: number
 }
 
-/** Custom icon images: drop `<id>.png` (or .jpg/.webp) into src/assets/icons/
-    — e.g. aizen.png, projects.png, about.png, lab.png, knowledge.png,
-    settings.png, trash.png — and that app switches from the drawn glyph to
-    the image everywhere (desktop, dock, windows, search). */
+/** Custom icons: drop `<id>.svg` (preferred — sharp at any size and tinted with
+    the app accent) or `<id>.png`/.jpg/.webp into src/assets/icons/, named for the
+    app: aizen, projects, about, lab, knowledge, settings, trash. Anything missing
+    falls back to the drawn glyph below.
+    Bundled SVGs are Ionicons (MIT, ionic.io/ionicons). */
+const ICON_SVGS: Record<string, string> = {}
+for (const [path, raw] of Object.entries(
+  import.meta.glob('../assets/icons/*.svg', {
+    eager: true,
+    query: '?raw',
+    import: 'default',
+  }) as Record<string, string>,
+)) {
+  const name = path.split('/').pop()!.replace(/\.[^.]+$/, '')
+  // Inherit the accent: paths with no fill of their own pick up currentColor,
+  // while stroke-style icons keep their explicit fill="none".
+  ICON_SVGS[name] = raw
+    .replace(/\sclass="[^"]*"/, '')
+    .replace(/<svg /, '<svg fill="currentColor" width="100%" height="100%" ')
+}
+
 const ICON_IMAGES: Record<string, string> = {}
 for (const [path, url] of Object.entries(
   import.meta.glob('../assets/icons/*.{png,jpg,jpeg,webp}', { eager: true, import: 'default' }) as Record<string, string>,
@@ -16,8 +33,30 @@ for (const [path, url] of Object.entries(
   ICON_IMAGES[name] = url
 }
 
-/** Rounded-tile app icon — a custom image when provided, else a drawn glyph. */
+/** Rounded-tile app icon — a custom glyph/image when provided, else a drawn one. */
 export function AppIcon({ icon, accent, size = 52 }: Props) {
+  const svg = ICON_SVGS[icon]
+  if (svg) {
+    return (
+      <span
+        aria-hidden
+        style={{
+          width: size,
+          height: size,
+          color: accent,
+          background: `linear-gradient(180deg, rgba(255,255,255,0.92), ${accent}8c)`,
+          boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.7)',
+        }}
+        className="flex items-center justify-center rounded-[23.4%]"
+      >
+        <span
+          className="block"
+          style={{ width: '58%', height: '58%' }}
+          dangerouslySetInnerHTML={{ __html: svg }}
+        />
+      </span>
+    )
+  }
   const img = ICON_IMAGES[icon]
   if (img) {
     return (
