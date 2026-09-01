@@ -6,6 +6,7 @@ import { LabApp } from '../apps/Lab'
 import { KnowledgeApp } from '../apps/Knowledge'
 import { SettingsApp } from '../apps/Settings'
 import { TrashApp } from '../apps/Trash'
+import { TimerApp } from '../apps/Timer'
 
 export interface AppDef {
   id: string
@@ -63,6 +64,15 @@ export const APPS: AppDef[] = [
     accent: '#a3b284',
     component: KnowledgeApp,
     defaultSize: { w: 680, h: 500 },
+  },
+  {
+    id: 'timer',
+    title: 'Timer',
+    tagline: 'Focus, measured honestly.',
+    icon: 'timer',
+    accent: '#c08a68',
+    component: TimerApp,
+    defaultSize: { w: 900, h: 640 },
   },
   {
     id: 'settings',
