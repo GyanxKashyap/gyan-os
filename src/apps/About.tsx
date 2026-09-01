@@ -9,11 +9,20 @@ const PROFILE = import.meta.glob('../assets/profile/*.{jpg,jpeg,png,webp,pdf}', 
   import: 'default',
 }) as Record<string, string>
 
-const assetFor = (base: string) =>
-  Object.entries(PROFILE).find(([p]) => p.split('/').pop()!.startsWith(base))?.[1]
+/** Match on a loose prefix so near-miss filenames (avtar.png, Resume-2024.pdf)
+    still work instead of silently showing nothing. */
+const assetFor = (...bases: string[]) =>
+  Object.entries(PROFILE).find(([p]) => {
+    const name = p.split('/').pop()!.toLowerCase()
+    return bases.some((b) => name.startsWith(b))
+  })?.[1]
 
-const AVATAR = assetFor('avatar')
-const RESUME = assetFor('resume')
+const AVATAR = assetFor('avatar', 'avtar', 'photo', 'me.')
+const RESUME = assetFor('resume', 'cv')
+
+/** How far to zoom into the avatar, and where to centre it (x y). */
+const AVATAR_ZOOM = '215%'
+const AVATAR_FOCUS = '41% 12%'
 
 interface Contact {
   label: string
@@ -81,13 +90,17 @@ export function AboutApp() {
       <header className="shrink-0 border-b border-black/5 px-6 pb-4 pt-5">
         <div className="flex items-center gap-4">
           {AVATAR ? (
-            <img
-              src={AVATAR}
-              alt={about.name}
-              // portraits put the face in the upper third — bias the crop upward
-              // so a circular avatar frames the face, not the chest
-              style={{ objectPosition: 'center 22%' }}
-              className="h-14 w-14 shrink-0 rounded-full object-cover shadow-[0_2px_10px_-2px_rgba(40,25,70,0.35),inset_0_0_0_1px_rgba(255,255,255,0.6)]"
+            <div
+              role="img"
+              aria-label={about.name}
+              // Zoomed and offset so the circle frames the face rather than the
+              // whole portrait. Tune AVATAR_ZOOM/AVATAR_FOCUS if the photo changes.
+              style={{
+                backgroundImage: `url(${AVATAR})`,
+                backgroundSize: `${AVATAR_ZOOM} auto`,
+                backgroundPosition: AVATAR_FOCUS,
+              }}
+              className="h-14 w-14 shrink-0 rounded-full bg-white/50 shadow-[0_2px_10px_-2px_rgba(40,25,70,0.35),inset_0_0_0_1px_rgba(255,255,255,0.6)]"
             />
           ) : (
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-white/90 to-lavender text-[22px] font-semibold text-plum shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
