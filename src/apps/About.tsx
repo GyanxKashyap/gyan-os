@@ -21,8 +21,8 @@ const AVATAR = assetFor('avatar', 'avtar', 'photo', 'me.')
 const RESUME = assetFor('resume', 'cv')
 
 /** How far to zoom into the avatar, and where to centre it (x y). */
-const AVATAR_ZOOM = '215%'
-const AVATAR_FOCUS = '41% 12%'
+const AVATAR_ZOOM = '265%'
+const AVATAR_FOCUS = '43% 10%'
 
 interface Contact {
   label: string
@@ -169,8 +169,19 @@ export function AboutApp() {
 function AboutTab() {
   return (
     <div className="mx-auto max-w-lg space-y-4 px-6 py-6">
-      <p className="text-[15px] leading-relaxed">{about.intro}</p>
-      <p className="text-[13.5px] leading-relaxed text-ink-soft">{about.now}</p>
+      <div className="flex items-start gap-5">
+        <div className="min-w-0 flex-1 space-y-4">
+          <p className="text-[15px] leading-relaxed">{about.intro}</p>
+          <p className="text-[13.5px] leading-relaxed text-ink-soft">{about.now}</p>
+        </div>
+        {AVATAR && (
+          <img
+            src={AVATAR}
+            alt={`${about.name}, illustrated`}
+            className="w-[148px] shrink-0 rounded-xl shadow-[0_8px_24px_-8px_rgba(40,25,70,0.4)]"
+          />
+        )}
+      </div>
       <div>
         <h2 className="text-[12px] font-semibold uppercase tracking-wider text-ink-soft">
           Current interests
