@@ -44,12 +44,24 @@
   ],
   "achievements": [
     {
-      "title": "Trained a 16M-parameter LLM from scratch",
-      "detail": "In a span of two months — custom Transformer, from-scratch BPE tokenizer, TinyStories pretraining, all on a MacBook. Benchmark score grew from 17% to 45.25% on a frozen 400-question eval."
+      "title": "Trained a language model from scratch — 17% → 45.25%",
+      "detail": "Built Aizen end to end in PyTorch over two months and raised it from 17% to 45.25% on a frozen 400-question benchmark, across five documented phases. No pretrained weights, no cloud GPUs — every run on a MacBook."
     },
     {
-      "title": "Built and shipped 11 projects while learning",
-      "detail": "Games, productivity apps, AI experiments and this OS itself — each one finished, published, and used."
+      "title": "Wrote a BPE tokenizer from scratch",
+      "detail": "No libraries: pair counting, merges, a 4096-token vocabulary, with digits kept whole so arithmetic wouldn't break. Swapping it in lifted the same-size model from 28.75% to 35.75% — the same parameters, better spent."
+    },
+    {
+      "title": "Ran the experiments honestly",
+      "detail": "Froze the benchmark before the first improvement and never tuned against it. One training run per approved experiment. A hard 30–50M parameter cap, so every gain had to come from data and method instead of scale."
+    },
+    {
+      "title": "Built Gyan OS",
+      "detail": "This portfolio is a working desktop operating system in the browser — window manager, dock, seven apps, global search, live wallpapers, and a real connection to my own language model."
+    },
+    {
+      "title": "Shipped 11 projects while teaching myself",
+      "detail": "Games, study tools, an AR experiment, a 3D AI assistant — each one finished and published, self-taught, alongside school."
     }
   ]
 }
