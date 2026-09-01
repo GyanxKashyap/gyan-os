@@ -84,7 +84,10 @@ export function AboutApp() {
             <img
               src={AVATAR}
               alt={about.name}
-              className="h-14 w-14 shrink-0 rounded-full object-cover shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]"
+              // portraits put the face in the upper third — bias the crop upward
+              // so a circular avatar frames the face, not the chest
+              style={{ objectPosition: 'center 22%' }}
+              className="h-14 w-14 shrink-0 rounded-full object-cover shadow-[0_2px_10px_-2px_rgba(40,25,70,0.35),inset_0_0_0_1px_rgba(255,255,255,0.6)]"
             />
           ) : (
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-b from-white/90 to-lavender text-[22px] font-semibold text-plum shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)]">
