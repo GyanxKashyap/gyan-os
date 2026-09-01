@@ -37,21 +37,17 @@ for (const [path, url] of Object.entries(
 export function AppIcon({ icon, accent, size = 52 }: Props) {
   const svg = ICON_SVGS[icon]
   if (svg) {
+    // No tile — the glyph sits directly on the dock/desktop, macOS-style.
+    // A soft shadow gives it depth and keeps it legible over any wallpaper.
     return (
       <span
         aria-hidden
-        style={{
-          width: size,
-          height: size,
-          color: accent,
-          background: `linear-gradient(180deg, rgba(255,255,255,0.92), ${accent}8c)`,
-          boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.7)',
-        }}
-        className="flex items-center justify-center rounded-[23.4%]"
+        style={{ width: size, height: size, color: accent }}
+        className="flex items-center justify-center"
       >
         <span
-          className="block"
-          style={{ width: '58%', height: '58%' }}
+          className="block [filter:drop-shadow(0_1px_2px_rgba(40,25,70,0.35))]"
+          style={{ width: '86%', height: '86%' }}
           dangerouslySetInnerHTML={{ __html: svg }}
         />
       </span>
