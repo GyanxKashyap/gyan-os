@@ -37,6 +37,20 @@ function ContactIcon({ name }: { name?: string }) {
         <path d="m3 7 8.2 5.6a1.4 1.4 0 0 0 1.6 0L21 7" />
       </svg>
     )
+  if (name === 'x')
+    return (
+      <svg {...common} fill="currentColor">
+        <path d="M17.53 3h2.94l-6.42 7.34L21.6 21h-5.9l-4.63-6.05L5.78 21H2.84l6.87-7.85L2.4 3h6.05l4.18 5.53zm-1.03 16.2h1.63L7.6 4.71H5.85z" />
+      </svg>
+    )
+  if (name === 'instagram')
+    return (
+      <svg {...common} fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="2.8" y="2.8" width="18.4" height="18.4" rx="5.4" />
+        <circle cx="12" cy="12" r="4.3" />
+        <circle cx="17.4" cy="6.7" r="1.25" fill="currentColor" stroke="none" />
+      </svg>
+    )
   if (name === 'linkedin')
     return (
       <svg {...common} fill="currentColor">

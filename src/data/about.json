@@ -7,7 +7,10 @@
   "now": "Right now my studies come first: I'm preparing for JEE-Mains to get into college next year. Building happens around them — one project, one experiment at a time.",
   "interests": ["AI", "Algorithms", "Game dev", "Gaming", "Physics", "Cinema"],
   "contacts": [
-    { "label": "GitHub", "value": "GyanxKashyap", "href": "https://github.com/GyanxKashyap", "icon": "github" }
+    { "label": "Email", "value": "gyanxkashyap@gmail.com", "href": "mailto:gyanxkashyap@gmail.com", "icon": "email" },
+    { "label": "GitHub", "value": "GyanxKashyap", "href": "https://github.com/GyanxKashyap", "icon": "github" },
+    { "label": "X", "value": "@Gyanxkashyap", "href": "https://x.com/Gyanxkashyap", "icon": "x" },
+    { "label": "Instagram", "value": "@godl1kegyan", "href": "https://www.instagram.com/godl1kegyan/", "icon": "instagram" }
   ],
   "skills": {
     "strong": [
