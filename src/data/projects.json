@@ -3,19 +3,25 @@
     "id": "aizen",
     "title": "Aizen",
     "category": "AI",
-    "description": "A ~16M-parameter language model built entirely from scratch in PyTorch on a MacBook — custom BPE tokenizer, TinyStories pretraining, and a frozen 400-question benchmark it climbed from 17% to 45.25%.",
-    "technologies": ["Python", "PyTorch", "Flask"],
-    "status": "Active — flagship project",
+    "description": "A ~16M-parameter language model built entirely from scratch in PyTorch on a MacBook \u2014 custom BPE tokenizer, TinyStories pretraining, and a frozen 400-question benchmark it climbed from 17% to 45.25%.",
+    "technologies": [
+      "Python",
+      "PyTorch",
+      "Flask"
+    ],
+    "status": "Active \u2014 flagship project",
     "github": null,
     "demo": null,
     "flagship": true
   },
   {
     "id": "ai-chatbot",
-    "title": "AI Chatbot — JARVIS & FRIDAY",
+    "title": "AI Chatbot \u2014 JARVIS & FRIDAY",
     "category": "AI",
-    "description": "A local-first 3D AI assistant with two peer companions — JARVIS for conversation and writing, FRIDAY for engineering. Runs on your own machine with cloned local voices, SQLite memory, and every capability gated behind explicit consent.",
-    "technologies": ["TypeScript"],
+    "description": "A local-first 3D AI assistant with two peer companions \u2014 JARVIS for conversation and writing, FRIDAY for engineering. Runs on your own machine with cloned local voices, SQLite memory, and every capability gated behind explicit consent.",
+    "technologies": [
+      "TypeScript"
+    ],
     "status": "On GitHub",
     "github": "https://github.com/GyanxKashyap/AI_CHATBOT",
     "demo": null
@@ -24,7 +30,7 @@
     "id": "ai-civilization",
     "title": "AI Civilization",
     "category": "AI",
-    "description": "Local AI project — details coming soon.",
+    "description": "Local AI project \u2014 details coming soon.",
     "technologies": [],
     "status": "In development (local)",
     "github": null,
@@ -35,8 +41,12 @@
     "id": "prompt-lib",
     "title": "Prompt Lib",
     "category": "Apps",
-    "description": "A polished local-first workspace for organizing, searching, versioning, and improving AI prompts — built with vanilla HTML, CSS, JavaScript, and localStorage.",
-    "technologies": ["HTML", "CSS", "JavaScript"],
+    "description": "A polished local-first workspace for organizing, searching, versioning, and improving AI prompts \u2014 built with vanilla HTML, CSS, JavaScript, and localStorage.",
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
     "status": "On GitHub",
     "github": "https://github.com/GyanxKashyap/PROMPT_LIBv1",
     "demo": null
@@ -45,8 +55,13 @@
     "id": "timer-app",
     "title": "Timer App",
     "category": "Apps",
-    "description": "A private, local-first study timer for macOS built with React, TypeScript, Rust, and Tauri. Accurate timers, factual analysis, calendar history, and sticky notes — without accounts, cloud sync, or gamification.",
-    "technologies": ["React", "TypeScript", "Rust", "Tauri"],
+    "description": "A private, local-first study timer for macOS built with React, TypeScript, Rust, and Tauri. Accurate timers, factual analysis, calendar history, and sticky notes \u2014 without accounts, cloud sync, or gamification.",
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Rust",
+      "Tauri"
+    ],
     "status": "On GitHub",
     "github": "https://github.com/GyanxKashyap/TIMER-APPv1.1",
     "demo": null
@@ -56,7 +71,11 @@
     "title": "Habit OS",
     "category": "Apps",
     "description": "A sleek habit tracking platform built to help users stay consistent, build discipline, and transform goals into everyday progress.",
-    "technologies": ["HTML", "CSS", "JavaScript"],
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
     "status": "On GitHub",
     "github": "https://github.com/GyanxKashyap/HabitOS_Tracker",
     "demo": null
@@ -65,18 +84,35 @@
     "id": "lunar-focus",
     "title": "Lunar Focus",
     "category": "Apps",
-    "description": "A study timer made for you to detect and define your time.",
-    "technologies": ["HTML", "CSS", "JavaScript"],
-    "status": "On GitHub",
+    "description": "A space-themed focus timer built around a single idea: make studying feel like building something. Pomodoro and count-up modes with a moon that grows through its phases as the session runs, daily goals, task lists, session history, analytics and ranks \u2014 plus an Orbit Store where focus time earns Lunar Tokens you spend on theme bundles that retheme the entire app, moon included.",
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "status": "On GitHub \u00b7 live",
     "github": "https://github.com/GyanxKashyap/Lunar_focus",
-    "demo": null
+    "demo": null,
+    "highlights": [
+      "Focus and Count Up timer modes",
+      "Moon phases tied to session progress",
+      "Daily goals with live progress tracking",
+      "Tasks, session history and analytics",
+      "Ranks and goals to keep momentum",
+      "Orbit Store: earn Lunar Tokens, unlock theme bundles",
+      "Four themes \u2014 default, Deep Space, Golden Eclipse, Frost Moon"
+    ]
   },
   {
     "id": "limitless",
     "title": "Limitless",
     "category": "Experiments",
-    "description": "A browser-based AR technique system using webcam hand tracking, voice commands, and cinematic Three.js/CSS effects — trigger domains, cursed techniques, and summons through gestures and speech.",
-    "technologies": ["JavaScript", "Three.js", "CSS"],
+    "description": "A browser-based AR technique system using webcam hand tracking, voice commands, and cinematic Three.js/CSS effects \u2014 trigger domains, cursed techniques, and summons through gestures and speech.",
+    "technologies": [
+      "JavaScript",
+      "Three.js",
+      "CSS"
+    ],
     "status": "On GitHub",
     "github": "https://github.com/GyanxKashyap/Limitless",
     "demo": null
@@ -86,7 +122,11 @@
     "title": "AirBound",
     "category": "Games",
     "description": "A polished Flappy Bird-inspired arcade game with smooth canvas gameplay, animated visuals, unlockable skins, achievements, sound effects, and local progress saving.",
-    "technologies": ["HTML", "CSS", "JavaScript"],
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
     "status": "On GitHub",
     "github": "https://github.com/GyanxKashyap/AirBound",
     "demo": null
@@ -95,8 +135,12 @@
     "id": "neon-snake",
     "title": "Neon Snake",
     "category": "Games",
-    "description": "A nostalgic retro arcade Snake game inspired by 80s/90s neon machines and vaporwave colors — collect food, dodge obstacles, unlock powerups, and chase your high score.",
-    "technologies": ["HTML", "CSS", "JavaScript"],
+    "description": "A nostalgic retro arcade Snake game inspired by 80s/90s neon machines and vaporwave colors \u2014 collect food, dodge obstacles, unlock powerups, and chase your high score.",
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
     "status": "On GitHub",
     "github": "https://github.com/GyanxKashyap/Snake_Game",
     "demo": null
@@ -105,8 +149,12 @@
     "id": "my-portfolio",
     "title": "My Portfolio (v1)",
     "category": "Web",
-    "description": "A portfolio documenting my coding journey, projects, and progress as I learn, build, and improve one project at a time — the predecessor of Gyan OS.",
-    "technologies": ["HTML", "CSS", "JavaScript"],
+    "description": "A portfolio documenting my coding journey, projects, and progress as I learn, build, and improve one project at a time \u2014 the predecessor of Gyan OS.",
+    "technologies": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
     "status": "On GitHub",
     "github": "https://github.com/GyanxKashyap/MY_PORTFOLIO",
     "demo": null
