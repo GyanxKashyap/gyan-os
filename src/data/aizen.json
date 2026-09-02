@@ -1,18 +1,50 @@
 {
   "model": {
     "name": "Aizen",
-    "version": "v3",
-    "checkpoint": "aizen_phase5.pt",
-    "params": "~16M parameters",
+    "version": "v6",
+    "checkpoint": "aizen_phase8.pt",
+    "params": "~40M parameters",
     "specs": [
-      { "label": "Architecture", "value": "Decoder-only Transformer, built from scratch in PyTorch" },
-      { "label": "Layers", "value": "8 Transformer layers" },
-      { "label": "Embedding", "value": "384 dimensions" },
-      { "label": "Attention heads", "value": "6" },
-      { "label": "Tokenizer", "value": "From-scratch BPE, 4096 vocab" },
-      { "label": "Context", "value": "512 tokens" },
-      { "label": "Hardware", "value": "MacBook (Apple M5, PyTorch MPS) — no cloud, no pretrained weights" },
-      { "label": "Constraint", "value": "Hard cap 30–50M params — all gains from data, tokenizer & training recipes" }
+      {
+        "label": "Architecture",
+        "value": "Decoder-only Transformer, built from scratch in PyTorch"
+      },
+      {
+        "label": "Layers",
+        "value": "12 Transformer layers"
+      },
+      {
+        "label": "Embedding",
+        "value": "512 dimensions"
+      },
+      {
+        "label": "Attention heads",
+        "value": "8"
+      },
+      {
+        "label": "Parameters",
+        "value": "40.19M — the 30–50M cap, honored"
+      },
+      {
+        "label": "Tokenizer",
+        "value": "From-scratch BPE, 4096 vocab"
+      },
+      {
+        "label": "Context",
+        "value": "512 tokens — remembers the last few conversation turns"
+      },
+      {
+        "label": "Pretraining",
+        "value": "~200MB of TinyStories, 52.5M tokens, 16k steps, then a 5k-step task fine-tune"
+      },
+      {
+        "label": "Hardware",
+        "value": "MacBook (Apple M5, PyTorch MPS) — no cloud, no pretrained weights"
+      },
+      {
+        "label": "Sibling",
+        "value": "Aizen Storyteller — the same weights before fine-tuning, served as /story"
+      }
     ]
   },
   "benchmark": {
@@ -23,35 +55,144 @@
         "checkpoint": "aizen.pt",
         "score": 17.0,
         "label": "Original char-level QA model (14.3M)",
-        "categories": { "arithmetic": 78, "multi-step": 2, "logic": 0, "patterns": 0, "general knowledge": 48, "instruction": 8, "reading": 0, "coding": 0 }
+        "categories": {
+          "arithmetic": 78,
+          "multi-step": 2,
+          "logic": 0,
+          "patterns": 0,
+          "general knowledge": 48,
+          "instruction": 8,
+          "reading": 0,
+          "coding": 0
+        }
       },
       {
         "id": "v1",
         "checkpoint": "aizen_phase3.pt",
         "score": 26.5,
         "label": "Phase-3 fine-tune (answer-masked loss)",
-        "categories": { "arithmetic": 72, "multi-step": 56, "logic": 0, "patterns": 14, "general knowledge": 52, "instruction": 14, "reading": 4, "coding": 0 }
+        "categories": {
+          "arithmetic": 72,
+          "multi-step": 56,
+          "logic": 0,
+          "patterns": 14,
+          "general knowledge": 52,
+          "instruction": 14,
+          "reading": 4,
+          "coding": 0
+        }
       },
       {
         "id": "v1b",
         "checkpoint": "aizen_phase3b.pt",
         "score": 28.75,
         "label": "Phase-3b targeted-fix dataset",
-        "categories": { "arithmetic": 86, "multi-step": 44, "logic": 10, "patterns": 14, "general knowledge": 48, "instruction": 12, "reading": 16, "coding": 0 }
+        "categories": {
+          "arithmetic": 86,
+          "multi-step": 44,
+          "logic": 10,
+          "patterns": 14,
+          "general knowledge": 48,
+          "instruction": 12,
+          "reading": 16,
+          "coding": 0
+        }
       },
       {
         "id": "v2",
         "checkpoint": "aizen_phase4.pt",
         "score": 35.75,
         "label": "From-scratch BPE tokenizer + 512 context",
-        "categories": { "arithmetic": 92, "multi-step": 60, "logic": 12, "patterns": 4, "general knowledge": 48, "instruction": 32, "reading": 38, "coding": 0 }
+        "categories": {
+          "arithmetic": 92,
+          "multi-step": 60,
+          "logic": 12,
+          "patterns": 4,
+          "general knowledge": 48,
+          "instruction": 32,
+          "reading": 38,
+          "coding": 0
+        }
       },
       {
         "id": "v3",
         "checkpoint": "aizen_phase5.pt",
         "score": 45.25,
-        "label": "TinyStories pretraining + masked-QA fine-tune — current",
-        "categories": { "arithmetic": 90, "multi-step": 54, "logic": 66, "patterns": 10, "general knowledge": 58, "instruction": 38, "reading": 44, "coding": 2 }
+        "label": "TinyStories pretraining + masked-QA fine-tune",
+        "categories": {
+          "arithmetic": 90,
+          "multi-step": 54,
+          "logic": 66,
+          "patterns": 10,
+          "general knowledge": 58,
+          "instruction": 38,
+          "reading": 44,
+          "coding": 2
+        }
+      },
+      {
+        "id": "v4",
+        "checkpoint": "aizen_phase6.pt",
+        "score": 47.25,
+        "label": "Hybrid data, first attempt — bAbI over-diluted the mix",
+        "categories": {
+          "arithmetic": 98,
+          "multi-step": 64,
+          "logic": 56,
+          "patterns": 20,
+          "general knowledge": 62,
+          "instruction": 40,
+          "reading": 36,
+          "coding": 2
+        }
+      },
+      {
+        "id": "v4b",
+        "checkpoint": "aizen_phase6b.pt",
+        "score": 52.25,
+        "label": "Hybrid data, dosage tuned (bAbI capped at 2,400)",
+        "categories": {
+          "arithmetic": 98,
+          "multi-step": 68,
+          "logic": 66,
+          "patterns": 34,
+          "general knowledge": 62,
+          "instruction": 38,
+          "reading": 48,
+          "coding": 4
+        }
+      },
+      {
+        "id": "v5",
+        "checkpoint": "aizen_phase7.pt",
+        "score": 48.0,
+        "label": "Conversation memory + negatives + false premises",
+        "categories": {
+          "arithmetic": 96,
+          "multi-step": 68,
+          "logic": 64,
+          "patterns": 14,
+          "general knowledge": 60,
+          "instruction": 42,
+          "reading": 38,
+          "coding": 2
+        }
+      },
+      {
+        "id": "v6",
+        "checkpoint": "aizen_phase8.pt",
+        "score": 60.75,
+        "label": "Aizen-40M scale finale — current",
+        "categories": {
+          "arithmetic": 100,
+          "multi-step": 82,
+          "logic": 72,
+          "patterns": 48,
+          "general knowledge": 64,
+          "instruction": 50,
+          "reading": 68,
+          "coding": 2
+        }
       }
     ]
   },
@@ -95,11 +236,30 @@
       "work": "103MB of TinyStories cleaned to ASCII, a 4096-vocab tokenizer v2, 26.2M tokens pretrained for 16k steps as a plain language model, then a 2.5k-step masked-QA fine-tune.",
       "outcome": "45.25% (v3) — current best. Logic exploded from 12 → 66; the pretrained model writes coherent stories.",
       "lesson": "Pretraining is not optional, even at 16M params. Comprehension comes from reading, not from Q&A pairs."
+    },
+    {
+      "id": 6,
+      "name": "Hybrid data",
+      "objective": "Mix curated public data with synthetic.",
+      "work": "Added bAbI reading and deduction tasks from HuggingFace alongside new synthetic patterns and 3-digit arithmetic. The first attempt over-diluted the mix; capping bAbI at 2,400 examples fixed it.",
+      "outcome": "45.25% → 47.25% (v4, over-diluted) → 52.25% (v4b). Patterns 10 → 34, reading 44 → 48.",
+      "lesson": "Proportion matters as much as presence — the same data at the wrong dosage made things worse before it made them better."
+    },
+    {
+      "id": 7,
+      "name": "Conversation",
+      "objective": "Multi-turn memory, negatives, false premises.",
+      "work": "2,500 multi-turn blocks so follow-ups like “and plus 3?” resolve against the previous answer, plus negative results and syllogisms with false premises. Every answer turn is masked for loss.",
+      "outcome": "Overall dipped to 48.0% (v5) while the model learned to hold a conversation — a deliberate trade.",
+      "lesson": "Not every step is a benchmark step. Some capabilities cost points on the ruler before they pay off."
+    },
+    {
+      "id": 8,
+      "name": "Scale finale",
+      "objective": "40M parameters — the one variable changed.",
+      "work": "12 layers, 512 dim, 8 heads, pretrained on ~200MB of TinyStories (52.5M tokens, 16k steps), then fine-tuned 5k steps on the full task pool. Two bugs caught first: a per-chunk reseeding flaw that had been shrinking every resumed run, and silent Metal GPU memory corruption above batch ~20.",
+      "outcome": "60.75% (v6) — every category at an all-time high: arithmetic 100, multi-step 82, logic 72, reading 68, patterns 48.",
+      "lesson": "The see-saw finally stopped. With enough capacity, gains in one category stopped costing another — and changing one variable at a time is what made the result believable."
     }
-  ],
-  "roadmap": [
-    { "phase": 6, "name": "Consolidation fine-tune", "status": "planned", "detail": "Patterns data for BPE, 3-digit arithmetic, multi-step reinforcement. Target: 50%+." },
-    { "phase": 7, "name": "Multi-turn conversation", "status": "planned", "detail": "Dialogue data + chat history in the UI — the 512 context supports it." },
-    { "phase": 8, "name": "Aizen-50M finale", "status": "planned", "detail": "12 layers / 512 dim, overnight pretraining on more TinyStories. The hard cap stays." }
   ]
 }

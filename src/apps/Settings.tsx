@@ -106,7 +106,7 @@ export function SettingsApp() {
             </span>
           </div>
           <div className="mt-3 space-y-1.5 text-[12px] text-ink-soft">
-            <p>Checkpoint: <code className="rounded bg-black/5 px-1 py-0.5 text-[11px]">aizen_phase5.pt</code> (v3)</p>
+            <p>Chat: <code className="rounded bg-black/5 px-1 py-0.5 text-[11px]">aizen_phase8.pt</code> (v6, ~40M) · Story: <code className="rounded bg-black/5 px-1 py-0.5 text-[11px]">aizen_phase8_pretrained.pt</code></p>
             <p>Generation: temperature 0.5 · top-k 20 — server defaults</p>
             <p className="text-[11px] text-ink-soft/80">
               Sliders arrive once the backend accepts per-request generation settings.

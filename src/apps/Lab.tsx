@@ -55,6 +55,9 @@ const TIMELINE = [
   { title: 'Fine-tuning', sub: 'Answer-masked loss → v1 26.5%, v1b 28.75%' },
   { title: 'BPE tokenizer', sub: 'From scratch, 2048 vocab, 512 context → v2 35.75%' },
   { title: 'Pretraining', sub: 'TinyStories, 26.2M tokens, 16k steps → v3 45.25%' },
+  { title: 'Hybrid data', sub: 'bAbI + synthetic; over-diluted v4 47.25%, dosage-tuned v4b 52.25%' },
+  { title: 'Conversation', sub: 'Multi-turn memory, negatives, false premises → v5 48.0% (deliberate trade)' },
+  { title: 'Scale finale', sub: '12L / 512d / 8H, ~40M params, 52.5M-token pretrain → v6 60.75%' },
 ]
 
 function Timeline() {
@@ -164,7 +167,7 @@ function Versions() {
   return (
     <div className="mx-auto max-w-xl px-6 py-6">
       <h1 className="text-xl font-semibold tracking-tight">Model versions</h1>
-      <p className="mt-1 text-[12.5px] text-ink-soft">Every checkpoint that survived — nothing deleted, nothing hidden.</p>
+      <p className="mt-1 text-[12.5px] text-ink-soft">Every checkpoint that survived — including the dips. Nothing deleted, nothing hidden.</p>
       <div className="mt-4 overflow-hidden rounded-2xl border border-black/8 bg-white/50">
         {versions.map((v, i) => (
           <div key={v.id} className={`flex items-center gap-4 px-4 py-3 ${i > 0 ? 'border-t border-black/5' : ''}`}>
@@ -189,6 +192,10 @@ const DATASETS = [
   { name: 'aizen_phase2_train.txt', size: '10k examples', desc: 'Reasoning dataset: multi-step arithmetic, logic, and instruction-following formats.' },
   { name: 'aizen_phase3b_train.txt', size: '15k examples', desc: 'Phase 2 data plus a 5k targeted-fix set aimed at measured failure cases.' },
   { name: 'pretrain.txt (TinyStories)', size: '103 MB · 26.2M tokens', desc: 'ASCII-cleaned TinyStories corpus, tokenized with the 4096-vocab BPE for overnight pretraining.' },
+  { name: 'aizen_phase6_train.txt', size: '3.7 MB · 79k lines', desc: 'Hybrid pool: synthetic patterns and 3-digit arithmetic plus bAbI reading/deduction tasks from HuggingFace. First mix was over-diluted.' },
+  { name: 'aizen_phase6b_train.txt', size: '2.6 MB · 67k lines', desc: 'The same hybrid pool with bAbI capped at 2,400 examples — the dosage that worked.' },
+  { name: 'aizen_phase7_train.txt', size: '3.0 MB · 91k lines', desc: '2,500 multi-turn conversation blocks, negative results and false-premise syllogisms, every answer turn masked for loss.' },
+  { name: 'pretrain2.txt (TinyStories, doubled)', size: '+103 MB · 52.5M tokens total', desc: 'A second ASCII-cleaned TinyStories slice; together with pretrain.txt it is the 200MB corpus the 40M model was pretrained on.' },
   { name: 'data/eval.json', size: '400 questions · frozen', desc: 'The benchmark. Eight categories, never edited after creation, never trained on.' },
 ]
 

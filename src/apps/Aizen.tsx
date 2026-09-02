@@ -3,7 +3,7 @@ import data from '../data/aizen.json'
 import { AppIcon } from '../desktop/AppIcon'
 import { useIntent } from '../lib/useIntent'
 
-const TABS = ['Chat', 'Model', 'Benchmark', 'Training', 'About'] as const
+const TABS = ['Chat', 'Story', 'Model', 'Benchmark', 'Training', 'About'] as const
 type Tab = (typeof TABS)[number]
 
 type Status = 'checking' | 'online' | 'offline'
@@ -50,6 +50,7 @@ export function AizenApp() {
       </nav>
       <div className="min-h-0 flex-1 overflow-auto">
         {tab === 'Chat' && <Chat status={status} onStatus={setStatus} />}
+        {tab === 'Story' && <Story status={status} onStatus={setStatus} />}
         {tab === 'Model' && <Model />}
         {tab === 'Benchmark' && <Benchmark />}
         {tab === 'Training' && <Training />}
@@ -109,13 +110,19 @@ function Chat({ status, onStatus }: { status: Status; onStatus: (s: Status) => v
     const q = text.trim()
     if (!q || busy) return
     setInput('')
+    // the backend accepts [[question, answer], ...] and fits as many recent turns as the 512 context allows
+    const history: [string, string][] = []
+    for (let i = 0; i + 1 < msgs.length; i += 2) {
+      const u = msgs[i], a = msgs[i + 1]
+      if (u.role === 'user' && a.role === 'aizen' && a.text && !a.text.startsWith('⚠')) history.push([u.text, a.text])
+    }
     setMsgs((m) => [...m, { role: 'user', text: q }, { role: 'aizen', text: '' }])
     setBusy(true)
     try {
       const res = await fetch('/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: q }),
+        body: JSON.stringify({ question: q, history: history.slice(-6) }),
       })
       if (!res.ok || !res.body) throw new Error(`status ${res.status}`)
       onStatus('online')
@@ -170,8 +177,9 @@ function Chat({ status, onStatus }: { status: Status; onStatus: (s: Status) => v
               ))}
             </div>
             <p className="max-w-md text-[11px] leading-relaxed text-ink-soft/80">
-              Aizen is a tiny ~16M-parameter model trained from scratch — it does best with short
-              questions: arithmetic, simple facts, small talk and short stories.
+              Aizen is a ~40M-parameter model trained from scratch — short questions work best:
+              arithmetic, facts, logic, small talk. It remembers the last few turns, so follow-ups like
+              “and plus 3?” work.
             </p>
           </div>
         ) : (
@@ -227,6 +235,82 @@ function OfflineCard() {
         The model isn&rsquo;t an API — it runs locally on Gyan&rsquo;s MacBook. When the backend is
         up, this chat streams real generations from <code className="text-[11px]">aizen_phase5.pt</code>.
         Meanwhile, the Model and Benchmark tabs show what it can do.
+      </p>
+    </div>
+  )
+}
+
+/* ---------------- Story ---------------- */
+
+function Story({ status, onStatus }: { status: Status; onStatus: (s: Status) => void }) {
+  const [prompt, setPrompt] = useState('Once upon a time')
+  const [out, setOut] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  const tell = async () => {
+    if (busy) return
+    setOut('')
+    setBusy(true)
+    try {
+      const res = await fetch('/story', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt.trim() || 'Once upon a time', tokens: 220, temperature: 0.85 }),
+      })
+      if (!res.ok || !res.body) throw new Error(`status ${res.status}`)
+      onStatus('online')
+      const reader = res.body.getReader()
+      const dec = new TextDecoder()
+      for (;;) {
+        const { done, value } = await reader.read()
+        if (done) break
+        setOut((t) => t + dec.decode(value))
+      }
+    } catch {
+      onStatus('offline')
+      setOut('⚠ The storyteller is offline — it runs locally on Gyan’s machine.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="mx-auto max-w-xl px-6 py-6">
+      <h1 className="text-xl font-semibold tracking-tight">Aizen Storyteller</h1>
+      <p className="mt-1 text-[12.5px] leading-relaxed text-ink-soft">
+        The same 40M weights <em>before</em> the task fine-tune — a pure language model that only ever read
+        TinyStories. Give it an opening, not a question.
+      </p>
+      {status === 'offline' && (
+        <p className="mt-3 rounded-xl border border-black/8 bg-white/50 px-4 py-3 text-[12.5px] text-ink-soft">
+          Offline right now — the storyteller runs on Gyan&rsquo;s MacBook alongside the chat model.
+        </p>
+      )}
+      <div className="mt-4 flex items-center gap-2 rounded-xl border border-black/8 bg-white/60 px-3 py-2 focus-within:border-lavender-deep/50">
+        <input
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && tell()}
+          placeholder="Once upon a time…"
+          className="min-w-0 flex-1 bg-transparent text-[13.5px] outline-none placeholder:text-ink-soft/60"
+          aria-label="Story opening"
+        />
+        <button
+          onClick={tell}
+          disabled={busy}
+          className="rounded-lg bg-lavender-deep px-3 py-1.5 text-[12px] font-medium text-white transition-opacity disabled:opacity-40"
+        >
+          {busy ? 'Writing…' : 'Tell the story'}
+        </button>
+      </div>
+      {(out || busy) && (
+        <div className="mt-4 whitespace-pre-wrap rounded-2xl border border-black/5 bg-white/60 px-5 py-4 text-[13.5px] leading-relaxed">
+          {out || <span className="animate-pulse text-ink-soft">…</span>}
+        </div>
+      )}
+      <p className="mt-3 text-[11px] text-ink-soft/80">
+        Sampled at temperature 0.85, top-k 40, up to 220 tokens — expect charming nonsense; that is what a
+        40M model that read children’s stories sounds like.
       </p>
     </div>
   )
@@ -317,12 +401,12 @@ function Benchmark() {
 /* ---------------- Training ---------------- */
 
 function Training() {
-  const [open, setOpen] = useState<number | null>(5)
+  const [open, setOpen] = useState<number | null>(8)
   return (
     <div className="mx-auto max-w-xl px-6 py-6">
       <h1 className="text-xl font-semibold tracking-tight">Training history</h1>
       <p className="mt-1 text-[12.5px] text-ink-soft">
-        Five completed phases, each judged against the frozen eval.
+        Eight completed phases, each judged against the frozen eval — 17% to 60.75%.
       </p>
       <div className="mt-5 flex flex-col gap-2">
         {data.phases.map((p) => (
@@ -350,18 +434,6 @@ function Training() {
         ))}
       </div>
 
-      <h2 className="mt-6 text-[13px] font-semibold uppercase tracking-wider text-ink-soft">Planned</h2>
-      <div className="mt-2 flex flex-col gap-1.5">
-        {data.roadmap.map((r) => (
-          <div key={r.phase} className="flex items-baseline gap-3 rounded-xl border border-dashed border-black/10 bg-white/30 px-4 py-2.5">
-            <span className="text-[12px] font-semibold text-ink-soft">Phase {r.phase}</span>
-            <span className="text-[12.5px]">
-              <span className="font-medium">{r.name}</span>
-              <span className="text-ink-soft"> — {r.detail}</span>
-            </span>
-          </div>
-        ))}
-      </div>
     </div>
   )
 }

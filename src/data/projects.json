@@ -3,22 +3,31 @@
     "id": "aizen",
     "title": "Aizen",
     "category": "AI",
-    "description": "A ~16M-parameter language model built entirely from scratch in PyTorch on a MacBook \u2014 custom BPE tokenizer, TinyStories pretraining, and a frozen 400-question benchmark it climbed from 17% to 45.25%.",
+    "description": "A ~40M-parameter language model built entirely from scratch in PyTorch on a MacBook — custom BPE tokenizer, TinyStories pretraining, multi-turn conversation, and a frozen 400-question benchmark it climbed from 17% to 60.75% across eight documented phases.",
     "technologies": [
       "Python",
       "PyTorch",
       "Flask"
     ],
-    "status": "Active \u2014 flagship project",
+    "status": "Active — flagship project",
     "github": null,
     "demo": null,
-    "flagship": true
+    "flagship": true,
+    "highlights": [
+      "Decoder-only Transformer written from scratch: 12 layers, 512 dim, 8 heads",
+      "From-scratch BPE tokenizer (4096 vocab), 512-token context",
+      "Pretrained on 52.5M TinyStories tokens, then task fine-tuned",
+      "Frozen 400-question benchmark: 17% → 60.75%, never tuned against",
+      "Remembers the last few turns — follow-ups like “and plus 3?” resolve",
+      "Storyteller sibling: the same weights before fine-tuning",
+      "Every run on a MacBook; hard 30–50M parameter cap honored at 40M"
+    ]
   },
   {
     "id": "ai-chatbot",
-    "title": "AI Chatbot \u2014 JARVIS & FRIDAY",
+    "title": "AI Chatbot — JARVIS & FRIDAY",
     "category": "AI",
-    "description": "A local-first 3D AI assistant with two peer companions \u2014 JARVIS for conversation and writing, FRIDAY for engineering. Runs on your own machine with cloned local voices, SQLite memory, and every capability gated behind explicit consent.",
+    "description": "A local-first 3D AI assistant with two peer companions — JARVIS for conversation and writing, FRIDAY for engineering. Runs on your own machine with cloned local voices, SQLite memory, and every capability gated behind explicit consent.",
     "technologies": [
       "TypeScript"
     ],
@@ -30,7 +39,7 @@
     "id": "ai-civilization",
     "title": "AI Civilization",
     "category": "AI",
-    "description": "Local AI project \u2014 details coming soon.",
+    "description": "Local AI project — details coming soon.",
     "technologies": [],
     "status": "In development (local)",
     "github": null,
@@ -41,7 +50,7 @@
     "id": "prompt-lib",
     "title": "Prompt Lib",
     "category": "Apps",
-    "description": "A polished local-first workspace for organizing, searching, versioning, and improving AI prompts \u2014 built with vanilla HTML, CSS, JavaScript, and localStorage.",
+    "description": "A polished local-first workspace for organizing, searching, versioning, and improving AI prompts — built with vanilla HTML, CSS, JavaScript, and localStorage.",
     "technologies": [
       "HTML",
       "CSS",
@@ -55,7 +64,7 @@
     "id": "timer-app",
     "title": "Timer App",
     "category": "Apps",
-    "description": "A private, local-first study timer for macOS built with React, TypeScript, Rust, and Tauri. Accurate timers, factual analysis, calendar history, and sticky notes \u2014 without accounts, cloud sync, or gamification.",
+    "description": "A private, local-first study timer for macOS built with React, TypeScript, Rust, and Tauri. Accurate timers, factual analysis, calendar history, and sticky notes — without accounts, cloud sync, or gamification.",
     "technologies": [
       "React",
       "TypeScript",
@@ -84,13 +93,13 @@
     "id": "lunar-focus",
     "title": "Lunar Focus",
     "category": "Apps",
-    "description": "A space-themed focus timer built around a single idea: make studying feel like building something. Pomodoro and count-up modes with a moon that grows through its phases as the session runs, daily goals, task lists, session history, analytics and ranks \u2014 plus an Orbit Store where focus time earns Lunar Tokens you spend on theme bundles that retheme the entire app, moon included.",
+    "description": "A space-themed focus timer built around a single idea: make studying feel like building something. Pomodoro and count-up modes with a moon that grows through its phases as the session runs, daily goals, task lists, session history, analytics and ranks — plus an Orbit Store where focus time earns Lunar Tokens you spend on theme bundles that retheme the entire app, moon included.",
     "technologies": [
       "HTML",
       "CSS",
       "JavaScript"
     ],
-    "status": "On GitHub \u00b7 live",
+    "status": "On GitHub · live",
     "github": "https://github.com/GyanxKashyap/Lunar_focus",
     "demo": null,
     "highlights": [
@@ -100,14 +109,14 @@
       "Tasks, session history and analytics",
       "Ranks and goals to keep momentum",
       "Orbit Store: earn Lunar Tokens, unlock theme bundles",
-      "Four themes \u2014 default, Deep Space, Golden Eclipse, Frost Moon"
+      "Four themes — default, Deep Space, Golden Eclipse, Frost Moon"
     ]
   },
   {
     "id": "limitless",
     "title": "Limitless",
     "category": "Experiments",
-    "description": "A browser-based AR technique system using webcam hand tracking, voice commands, and cinematic Three.js/CSS effects \u2014 trigger domains, cursed techniques, and summons through gestures and speech.",
+    "description": "A browser-based AR technique system using webcam hand tracking, voice commands, and cinematic Three.js/CSS effects — trigger domains, cursed techniques, and summons through gestures and speech.",
     "technologies": [
       "JavaScript",
       "Three.js",
@@ -135,7 +144,7 @@
     "id": "neon-snake",
     "title": "Neon Snake",
     "category": "Games",
-    "description": "A nostalgic retro arcade Snake game inspired by 80s/90s neon machines and vaporwave colors \u2014 collect food, dodge obstacles, unlock powerups, and chase your high score.",
+    "description": "A nostalgic retro arcade Snake game inspired by 80s/90s neon machines and vaporwave colors — collect food, dodge obstacles, unlock powerups, and chase your high score.",
     "technologies": [
       "HTML",
       "CSS",
@@ -149,7 +158,7 @@
     "id": "my-portfolio",
     "title": "My Portfolio (v1)",
     "category": "Web",
-    "description": "A portfolio documenting my coding journey, projects, and progress as I learn, build, and improve one project at a time \u2014 the predecessor of Gyan OS.",
+    "description": "A portfolio documenting my coding journey, projects, and progress as I learn, build, and improve one project at a time — the predecessor of Gyan OS.",
     "technologies": [
       "HTML",
       "CSS",

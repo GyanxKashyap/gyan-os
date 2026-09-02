@@ -5,20 +5,64 @@
   "age": 18,
   "intro": "I really like to discover and build. That's why, instead of calling an API, I built a language model from scratch — every layer, the tokenizer, the training loop, all of it, on my own laptop.",
   "now": "Right now my studies come first: I'm preparing for JEE-Mains to get into college next year. Building happens around them — one project, one experiment at a time.",
-  "interests": ["AI", "Algorithms", "Game dev", "Gaming", "Physics", "Cinema"],
+  "interests": [
+    "AI",
+    "Algorithms",
+    "Game dev",
+    "Gaming",
+    "Physics",
+    "Cinema"
+  ],
   "contacts": [
-    { "label": "Email", "value": "gyanxkashyap@gmail.com", "href": "mailto:gyanxkashyap@gmail.com", "icon": "email" },
-    { "label": "GitHub", "value": "GyanxKashyap", "href": "https://github.com/GyanxKashyap", "icon": "github" },
-    { "label": "X", "value": "@Gyanxkashyap", "href": "https://x.com/Gyanxkashyap", "icon": "x" },
-    { "label": "Instagram", "value": "@godl1kegyan", "href": "https://www.instagram.com/godl1kegyan/", "icon": "instagram" }
+    {
+      "label": "Email",
+      "value": "gyanxkashyap@gmail.com",
+      "href": "mailto:gyanxkashyap@gmail.com",
+      "icon": "email"
+    },
+    {
+      "label": "GitHub",
+      "value": "GyanxKashyap",
+      "href": "https://github.com/GyanxKashyap",
+      "icon": "github"
+    },
+    {
+      "label": "X",
+      "value": "@Gyanxkashyap",
+      "href": "https://x.com/Gyanxkashyap",
+      "icon": "x"
+    },
+    {
+      "label": "Instagram",
+      "value": "@godl1kegyan",
+      "href": "https://www.instagram.com/godl1kegyan/",
+      "icon": "instagram"
+    }
   ],
   "skills": {
     "strong": [
-      { "name": "Python", "note": "my best language — Aizen is built with it" },
-      { "name": "HTML & CSS", "note": "most of my apps and games ship with it" }
+      {
+        "name": "Python",
+        "note": "my best language — Aizen is built with it"
+      },
+      {
+        "name": "HTML & CSS",
+        "note": "most of my apps and games ship with it"
+      }
     ],
-    "working": [{ "name": "JavaScript", "note": "games, apps and experiments" }],
-    "familiar": ["TypeScript", "React", "PyTorch", "Rust / Tauri", "Three.js"]
+    "working": [
+      {
+        "name": "JavaScript",
+        "note": "games, apps and experiments"
+      }
+    ],
+    "familiar": [
+      "TypeScript",
+      "React",
+      "PyTorch",
+      "Rust / Tauri",
+      "Three.js"
+    ]
   },
   "journey": [
     {
@@ -44,8 +88,8 @@
   ],
   "achievements": [
     {
-      "title": "Trained a language model from scratch — 17% → 45.25%",
-      "detail": "Built Aizen end to end in PyTorch over two months and raised it from 17% to 45.25% on a frozen 400-question benchmark, across five documented phases. No pretrained weights, no cloud GPUs — every run on a MacBook."
+      "title": "Trained a language model from scratch — 17% → 60.75%",
+      "detail": "Built Aizen end to end in PyTorch and raised it from 17% to 60.75% on a frozen 400-question benchmark across eight documented phases — ending with a 40M-parameter model where every category hit an all-time high. No pretrained weights, no cloud GPUs — every run on a MacBook."
     },
     {
       "title": "Wrote a BPE tokenizer from scratch",
@@ -53,7 +97,7 @@
     },
     {
       "title": "Ran the experiments honestly",
-      "detail": "Froze the benchmark before the first improvement and never tuned against it. One training run per approved experiment. A hard 30–50M parameter cap, so every gain had to come from data and method instead of scale."
+      "detail": "Froze the benchmark before the first improvement and never tuned against it. One training run per approved experiment. Set a hard 30–50M parameter cap up front and finished at 40M, so every gain had to come from data and method — and the one time scale was the variable, it was the only variable changed."
     },
     {
       "title": "Built Gyan OS",

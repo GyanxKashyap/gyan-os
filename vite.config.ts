@@ -13,6 +13,8 @@ export default defineConfig({
     proxy: {
       // Aizen backend (tiny-llm/server.py) — only used when it's running locally
       '/chat': 'http://localhost:8321',
+      '/story': 'http://localhost:8321',
+      '/meta': 'http://localhost:8321',
     },
   },
 })

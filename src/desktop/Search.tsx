@@ -30,7 +30,7 @@ function buildIndex(): Result[] {
       keywords: `${a.title} app open`,
     })
   }
-  for (const t of ['Chat', 'Model', 'Benchmark', 'Training', 'About']) {
+  for (const t of ['Chat', 'Story', 'Model', 'Benchmark', 'Training', 'About']) {
     results.push({
       id: `aizen-${t}`,
       title: `Aizen ${t}`,

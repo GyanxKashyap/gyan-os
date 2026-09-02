@@ -1,12 +1,49 @@
 {
-  "categories": ["AI", "Machine Learning", "Programming", "Game Development", "Space", "Experiments"],
+  "categories": [
+    "AI",
+    "Machine Learning",
+    "Programming",
+    "Game Development",
+    "Space",
+    "Experiments"
+  ],
   "notes": [
+    {
+      "id": "one-variable",
+      "title": "The 40M finale: change one variable",
+      "category": "Machine Learning",
+      "date": "2026-09-02",
+      "related": [
+        "Aizen"
+      ],
+      "content": [
+        "Seven phases in, Aizen sat at 48–52% with a see-saw problem: every fix to one category cost another. Phase 8 changed exactly one thing — size. 8 layers / 384 dim / 6 heads became 12 / 512 / 8, about 40M parameters. Same tokenizer, same 512 context, same warm-up-and-cosine recipe.",
+        "Before training I caught two bugs that had been quietly wrecking earlier runs: a per-chunk reseeding flaw that shrank every resumed run, and silent Metal GPU memory corruption above batch size ~20. Neither threw an error. Both were found by checking numbers that should have matched and didn’t.",
+        "Result: 60.75% — every category at an all-time high, and the see-saw stopped. Because only one variable moved, the result is believable: the gain is the capacity, not a lucky recipe. And 40M sits inside the 30–50M cap I set on day one."
+      ]
+    },
+    {
+      "id": "proportion",
+      "title": "Proportion matters as much as presence",
+      "category": "Machine Learning",
+      "date": "2026-09-01",
+      "related": [
+        "Aizen"
+      ],
+      "content": [
+        "Phase 6 added real public data for the first time — bAbI reading and deduction tasks — next to my synthetic patterns and 3-digit arithmetic. First attempt: 47.25%, up only two points, with reading comprehension actually falling. The bAbI slice had swamped everything else.",
+        "Capping bAbI at 2,400 examples and re-running lifted it to 52.25%. Same sources, different dosage, five-point swing. Phase 7 taught the mirror lesson: adding conversation memory dipped the score to 48.0% — a deliberate trade for a capability the benchmark doesn’t measure.",
+        "So two rules I now train by: the ratio of a dataset matters as much as whether it is present, and not every worthwhile step is a benchmark step."
+      ]
+    },
     {
       "id": "eval-first",
       "title": "Measure before you improve",
       "category": "Machine Learning",
       "date": "2026-08-28",
-      "related": ["Aizen"],
+      "related": [
+        "Aizen"
+      ],
       "content": [
         "Before touching Aizen's training, I built the measuring stick: a frozen set of 400 questions across 8 categories — arithmetic, multi-step, logic, patterns, general knowledge, instruction following, reading, coding — and an eval.py that scores any checkpoint the same way, every time.",
         "Two rules made it work. The eval is frozen: I never tweak questions to make a model look better. And one training run per approved experiment: no quietly re-running until the number goes up.",
@@ -18,7 +55,9 @@
       "title": "Fine-tuning a tiny model is whack-a-mole",
       "category": "Machine Learning",
       "date": "2026-08-28",
-      "related": ["Aizen"],
+      "related": [
+        "Aizen"
+      ],
       "content": [
         "Phase 3 taught me that a 14M-parameter model has no spare capacity. Fine-tuning with an answer-masked loss (only the answer tokens count toward the loss) lifted the score from 17% to 26.5% — but categories moved against each other.",
         "Fixing multi-step arithmetic hurt plain arithmetic. A targeted-fix dataset (Phase 3b) brought arithmetic back from 72 to 86 but dropped multi-step from 56 to 44. A see-saw.",
@@ -30,7 +69,9 @@
       "title": "Writing a BPE tokenizer from scratch",
       "category": "AI",
       "date": "2026-08-28",
-      "related": ["Aizen"],
+      "related": [
+        "Aizen"
+      ],
       "content": [
         "Character-level models spend most of their capacity learning to spell. So I wrote byte-pair encoding from scratch — no libraries: count adjacent pairs, merge the most frequent, repeat to a 2048-token vocabulary.",
         "Two design choices mattered more than the algorithm: digits stay single tokens (so arithmetic doesn't break on weird merges like '45' becoming one token), and newlines never merge (so the Q/A structure stays visible).",
@@ -42,7 +83,9 @@
       "title": "Why pretraining matters even at 16M params",
       "category": "Machine Learning",
       "date": "2026-08-29",
-      "related": ["Aizen"],
+      "related": [
+        "Aizen"
+      ],
       "content": [
         "Aizen kept failing logic questions not because it couldn't reason, but because it couldn't read — it had only ever seen Q&A pairs, never flowing English.",
         "So: 103MB of TinyStories, cleaned to ASCII, tokenized to 26.2M tokens with a 4096-vocab BPE, pretrained overnight for 16k steps as a plain language model. Then a short 2.5k-step masked-QA fine-tune on top.",
@@ -54,7 +97,9 @@
       "title": "A language model is smaller than you think",
       "category": "AI",
       "date": "2026-08-27",
-      "related": ["Aizen"],
+      "related": [
+        "Aizen"
+      ],
       "content": [
         "The whole of Aizen — attention, MLP blocks, embeddings, the training loop — is a handful of readable Python files. No framework magic: model.py defines the Transformer, a training script feeds it batches, a checkpoint file carries weights, vocab and config together.",
         "Building it demystified every buzzword. 'Attention' is a few matrix multiplications. 'Context length' is an array size. 'Training' is a loop that nudges numbers.",
@@ -66,7 +111,9 @@
       "title": "Building an OS-shaped portfolio",
       "category": "Programming",
       "date": "2026-08-29",
-      "related": ["Gyan OS"],
+      "related": [
+        "Gyan OS"
+      ],
       "content": [
         "A portfolio is a claim about what you can build — so the site itself should be evidence. Gyan OS is a desktop: menu bar, dock with magnification, draggable windows with real z-ordering, apps.",
         "The interesting engineering is state: a window manager is just a store mapping app ids to geometry plus a z-counter, and everything else is springs and pointer events.",
