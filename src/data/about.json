@@ -79,7 +79,7 @@
     },
     {
       "title": "Aizen",
-      "detail": "The big one — a language model built completely from scratch in PyTorch. Two months from a character-level toy to a pretrained 16M-parameter model with its own BPE tokenizer and benchmark."
+      "detail": "The big one — a language model built completely from scratch in PyTorch. From a character-level toy to a 40M-parameter model with its own BPE tokenizer and a frozen benchmark it climbed from 17% to 60.75%."
     },
     {
       "title": "Now",
