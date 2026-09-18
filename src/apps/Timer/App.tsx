@@ -1,3 +1,4 @@
+import { useMotionPreferences } from '../../lib/useMotionPreferences'
 import { useState } from 'react'
 import { flushSync } from 'react-dom'
 import { AboutPanel } from './components/AboutPanel'
@@ -11,6 +12,7 @@ type AppView = 'timer' | 'analysis' | 'notes' | 'about'
 export function App() {
   const [view, setView] = useState<AppView>('timer')
   const timer = useStudyTimer()
+  const reduceMotion = useMotionPreferences()
   const focusMode = Boolean(timer.active)
 
   const switchView = (nextView: AppView) => {
@@ -18,7 +20,6 @@ export function App() {
     const transitionDocument = document as Document & {
       startViewTransition?: (update: () => void) => void
     }
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (!transitionDocument.startViewTransition || reduceMotion) {
       setView(nextView)
       return

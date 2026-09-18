@@ -21,7 +21,7 @@ import type { ActiveSession, SessionStatus, StudySession } from '../domain/types
 export function useStudyTimer() {
   const [active, setActive] = useState<ActiveSession | null>(null)
   const [lastResult, setLastResult] = useState<StudySession | null>(null)
-  const [now, setNow] = useState(Date.now())
+  const [now, setNow] = useState(() => Date.now())
   const [ready, setReady] = useState(false)
   const [storageMessage, setStorageMessage] = useState('')
   const finishingRef = useRef<string | null>(null)
