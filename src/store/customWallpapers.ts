@@ -1,3 +1,4 @@
+import { DEFAULT_WALLPAPER } from '../lib/wallpapers'
 import { create } from 'zustand'
 import { dbAddWallpaper, dbDeleteWallpaper, dbListWallpapers } from '../lib/wallpaperDb'
 import { useSettings } from './settings'
@@ -148,6 +149,6 @@ export const useCustomWallpapers = create<CustomWallpaperStore>((set, get) => ({
     if (item) URL.revokeObjectURL(item.url)
     set({ items: get().items.filter((i) => i.id !== id) })
     const settings = useSettings.getState()
-    if (settings.wallpaper === `custom:${id}`) settings.setWallpaper('dusk')
+    if (settings.wallpaper === `custom:${id}`) settings.setWallpaper(DEFAULT_WALLPAPER)
   },
 }))

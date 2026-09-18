@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export type WallpaperId = 'dusk' | 'dawn' | 'night'
+import { DEFAULT_WALLPAPER } from '../lib/wallpapers'
+export type { WallpaperId } from '../lib/wallpapers'
 
 export const ACCENTS = [
   { id: 'lavender', color: '#8d7fb5', label: 'Lavender' },
@@ -28,7 +29,7 @@ interface SettingsStore {
 export const useSettings = create<SettingsStore>()(
   persist(
     (set) => ({
-      wallpaper: 'dusk',
+      wallpaper: DEFAULT_WALLPAPER,
       accent: '#8d7fb5',
       reduceMotion: false,
       liveWallpaper: true,

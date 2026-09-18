@@ -3,45 +3,7 @@ import { useMotionPreferences } from '../lib/useMotionPreferences'
 import { useSettings, type WallpaperId } from '../store/settings'
 import { useCustomWallpapers } from '../store/customWallpapers'
 
-interface Palette {
-  sky: [string, string, string]
-  sun: string
-  dunes: [[string, string], [string, string], [string, string]]
-  night?: boolean
-  /** dominant color for chrome tinting */
-  tint: [number, number, number]
-}
-
-export const WALLPAPERS: Record<WallpaperId, { label: string; p: Palette }> = {
-  dusk: {
-    label: 'Lavender dusk',
-    p: {
-      sky: ['#e9e0f4', '#e3d3e8', '#f0d9c9'],
-      sun: '#fdf3e3',
-      dunes: [['#cfc0e2', '#b7a6d4'], ['#b3a0cd', '#9784ba'], ['#8b78ab', '#6f5f92']],
-      tint: [151, 132, 186],
-    },
-  },
-  dawn: {
-    label: 'Peach dawn',
-    p: {
-      sky: ['#fdeee2', '#f6ddd2', '#eed4da'],
-      sun: '#fff7ea',
-      dunes: [['#f0cbb4', '#e4b39a'], ['#dfa98f', '#cd9179'], ['#b97f6d', '#996657']],
-      tint: [205, 145, 121],
-    },
-  },
-  night: {
-    label: 'Quiet night',
-    p: {
-      sky: ['#3d3654', '#4a4066', '#5d4d6e'],
-      sun: '#8d7fb5',
-      dunes: [['#524a6e', '#453e60'], ['#403856', '#342d48'], ['#2b2440', '#1f1a30']],
-      tint: [111, 95, 146],
-      night: true,
-    },
-  },
-}
+import { WALLPAPERS, DEFAULT_WALLPAPER, type Palette } from '../lib/wallpapers'
 
 // deterministic star field for the night sky (no Math.random — stable render)
 const STARS = Array.from({ length: 42 }, (_, i) => {
@@ -98,7 +60,11 @@ export function Wallpaper() {
     return <WallpaperSvg p={WALLPAPERS.dusk.p} live={false} className="absolute inset-0 h-full w-full" />
   }
 
-  const { p } = WALLPAPERS[id as WallpaperId] ?? WALLPAPERS.dusk
+  const { p, media } = WALLPAPERS[id as WallpaperId] ?? WALLPAPERS[DEFAULT_WALLPAPER]
+  if (media) {
+    if (reduceMotion || !live) return <img src={media.poster} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+    return <video ref={videoRef} src={media.src} poster={media.poster} preload="metadata" autoPlay loop muted playsInline aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+  }
   return <WallpaperSvg p={p} live={live && !reduceMotion} className="absolute inset-0 h-full w-full" />
 }
 

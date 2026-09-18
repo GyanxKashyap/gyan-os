@@ -40,7 +40,7 @@ function useSystemStatus() {
 import { useWindows } from '../store/windows'
 import { useSettings } from '../store/settings'
 import { appById } from '../lib/apps'
-import { WALLPAPERS } from './Wallpaper'
+import { WALLPAPERS } from '../lib/wallpapers'
 import { MenuPanel, type MenuEntry } from './Menu'
 import type { WallpaperId } from '../store/settings'
 

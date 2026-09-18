@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 import { useSettings, ACCENTS, type WallpaperId } from '../store/settings'
 import { useCustomWallpapers } from '../store/customWallpapers'
-import { WALLPAPERS, WallpaperSvg } from '../desktop/Wallpaper'
+import { WallpaperSvg } from '../desktop/Wallpaper'
+import { WALLPAPERS } from '../lib/wallpapers'
 
 import { useAizenStatus } from '../store/aizen'
 
@@ -30,7 +31,7 @@ export function SettingsApp() {
                 aria-label={`Wallpaper: ${WALLPAPERS[id].label}`}
               >
                 <div className="relative h-14 w-24">
-                  <WallpaperSvg p={WALLPAPERS[id].p} className="h-full w-full" />
+                  {WALLPAPERS[id].media ? <img src={WALLPAPERS[id].media.poster} alt="" className="h-full w-full object-cover" /> : <WallpaperSvg p={WALLPAPERS[id].p} className="h-full w-full" />}
                 </div>
                 <span className="block bg-white/60 py-0.5 text-center text-[10.5px] font-medium text-ink-soft">
                   {WALLPAPERS[id].label}
@@ -44,7 +45,7 @@ export function SettingsApp() {
           <div className="mt-3 flex items-center justify-between">
             <div>
               <p className="text-[12.5px] font-medium">Live wallpaper</p>
-              <p className="text-[11.5px] text-ink-soft">Drifting dunes, breathing light{wallpaper === 'night' ? ', twinkling stars' : ''}</p>
+              <p className="text-[11.5px] text-ink-soft">Animate the selected wallpaper</p>
             </div>
             <Toggle on={liveWallpaper && !reduceMotion} onChange={setLiveWallpaper} label="Live wallpaper" />
           </div>
@@ -68,7 +69,7 @@ export function SettingsApp() {
           <div className="mt-4 flex items-center justify-between">
             <div>
               <p className="text-[12.5px] font-medium">Automatically hide the Dock</p>
-              <p className="text-[11.5px] text-ink-soft">Slides away when idle; bottom edge brings it back</p>
+              <p className="text-[11.5px] text-ink-soft">On desktop, move to the bottom edge to reveal it</p>
             </div>
             <Toggle on={dockAutoHide} onChange={setDockAutoHide} label="Automatically hide the Dock" />
           </div>
@@ -200,7 +201,7 @@ function Toggle({ on, onChange, label }: { on: boolean; onChange: (v: boolean) =
       aria-checked={on}
       aria-label={label}
       onClick={() => onChange(!on)}
-      className={`relative h-6 w-10 rounded-full transition-colors ${on ? 'bg-lavender-deep' : 'bg-black/15'}`}
+      className={`relative shrink-0 h-6 w-10 rounded-full transition-colors ${on ? 'bg-lavender-deep' : 'bg-black/15'}`}
     >
       <span
         className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-[left] ${on ? 'left-[18px]' : 'left-0.5'}`}

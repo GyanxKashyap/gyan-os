@@ -1,6 +1,7 @@
 import { useAizen } from '../store/aizen'
 import { useEffect, useState } from 'react'
-import { Wallpaper, WALLPAPERS } from './Wallpaper'
+import { Wallpaper } from './Wallpaper'
+import { WALLPAPERS } from '../lib/wallpapers'
 import { MenuBar } from './MenuBar'
 import { DesktopIcons } from './DesktopIcons'
 import { Dock } from './Dock'
