@@ -1,3 +1,4 @@
+import { useMotionPreferences } from '../lib/useMotionPreferences'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { APPS } from '../lib/apps'
@@ -115,6 +116,7 @@ function rank(q: string): Result[] {
 }
 
 export function Search({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const reduceMotion = useMotionPreferences()
   const [q, setQ] = useState('')
   const [sel, setSel] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -130,7 +132,6 @@ export function Search({ open, onClose }: { open: boolean; onClose: () => void }
     }
   }, [open])
 
-  useEffect(() => setSel(0), [q])
 
   const launch = (r: Result) => {
     openApp(r.appId, r.intent)
@@ -156,20 +157,20 @@ export function Search({ open, onClose }: { open: boolean; onClose: () => void }
       {open && (
         <motion.div
           className="absolute inset-0 z-[6000] flex items-start justify-center bg-black/15 pt-[18vh]"
-          initial={{ opacity: 0 }}
+          initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
+          transition={reduceMotion ? { duration: 0 } : { duration: 0.15 }}
           onPointerDown={onClose}
         >
           <motion.div
             role="dialog"
             aria-label="Search Gyan OS"
             className="glass w-[540px] max-w-[90vw] overflow-hidden rounded-2xl shadow-[0_30px_80px_-16px_rgba(30,20,50,0.45)]"
-            initial={{ scale: 0.96, y: -8 }}
+            initial={reduceMotion ? false : { scale: 0.96, y: -8 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.97, y: -6, opacity: 0 }}
-            transition={{ type: 'spring', bounce: 0, duration: 0.25 }}
+            transition={reduceMotion ? { duration: 0 } : { type: 'spring', bounce: 0, duration: 0.25 }}
             onPointerDown={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-3 px-4 py-3">
@@ -180,7 +181,7 @@ export function Search({ open, onClose }: { open: boolean; onClose: () => void }
               <input
                 ref={inputRef}
                 value={q}
-                onChange={(e) => setQ(e.target.value)}
+                onChange={(e) => { setQ(e.target.value); setSel(0) }}
                 onKeyDown={onKey}
                 placeholder="Search Gyan OS…"
                 className="min-w-0 flex-1 bg-transparent text-[16px] outline-none placeholder:text-ink-soft/50"

@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+import { useMotionPreferences } from '../lib/useMotionPreferences'
 import { useSettings, type WallpaperId } from '../store/settings'
 import { useCustomWallpapers } from '../store/customWallpapers'
 
@@ -55,20 +57,29 @@ const STARS = Array.from({ length: 42 }, (_, i) => {
 export function Wallpaper() {
   const id = useSettings((s) => s.wallpaper)
   const live = useSettings((s) => s.liveWallpaper)
-  const reduceMotion = useSettings((s) => s.reduceMotion)
+  const reduceMotion = useMotionPreferences()
+  const videoRef = useRef<HTMLVideoElement>(null)
   const custom = useCustomWallpapers((s) =>
     id.startsWith('custom:') ? s.items.find((i) => `custom:${i.id}` === id) : undefined,
   )
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    if (reduceMotion || !live) video.pause()
+    else void video.play().catch(() => undefined)
+  }, [reduceMotion, live, id, custom?.url])
 
   if (id.startsWith('custom:')) {
     // while IndexedDB is still loading (or the item was deleted), fall back to dusk
     if (custom) {
       return custom.type.startsWith('video/') ? (
         <video
+          ref={videoRef}
           key={custom.id}
           src={custom.url}
           className="absolute inset-0 h-full w-full object-cover"
-          autoPlay={!reduceMotion}
+          autoPlay={live && !reduceMotion}
           loop
           muted
           playsInline
