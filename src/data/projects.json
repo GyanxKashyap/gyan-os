@@ -10,7 +10,7 @@
       "Flask"
     ],
     "status": "Active — flagship project",
-    "github": null,
+    "github": "https://github.com/GyanxKashyap/aizen",
     "demo": null,
     "flagship": true,
     "highlights": [
@@ -34,17 +34,6 @@
     "status": "On GitHub",
     "github": "https://github.com/GyanxKashyap/AI_CHATBOT",
     "demo": null
-  },
-  {
-    "id": "ai-civilization",
-    "title": "AI Civilization",
-    "category": "AI",
-    "description": "Local AI project — details coming soon.",
-    "technologies": [],
-    "status": "In development (local)",
-    "github": null,
-    "demo": null,
-    "placeholder": true
   },
   {
     "id": "prompt-lib",
@@ -101,7 +90,7 @@
     ],
     "status": "On GitHub · live",
     "github": "https://github.com/GyanxKashyap/Lunar_focus",
-    "demo": null,
+    "demo": "https://gyanxkashyap.github.io/Lunar_focus/",
     "highlights": [
       "Focus and Count Up timer modes",
       "Moon phases tied to session progress",
