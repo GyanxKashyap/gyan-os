@@ -50,5 +50,9 @@ and browser games. I learn by building, testing ideas, and documenting the work.
 
 ## Credits and license
 
-Source code is under [MIT](LICENSE). Media assets and depicted third-party
-projects retain their respective rights; see [asset credits](docs/ASSETS.md).
+Copyright © 2026 Gyan Kashyap. **All rights reserved.** This repository is a
+portfolio showcase; reuse of my original code or content requires my written
+permission. See the [rights notice](LICENSE).
+
+Third-party software, media assets and depicted projects retain their respective
+licenses and rights; see [asset credits](docs/ASSETS.md).
