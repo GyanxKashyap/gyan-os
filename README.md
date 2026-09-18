@@ -1,6 +1,6 @@
 # Gyan OS
 
-**Gyan Kashyap’s portfolio, imagined as a desktop.**
+** MY portfolio, imagined as a operating system.**
 
 A place for my projects, experiments, learning notes, and the tools I build.
 Windows, a dock, and a personal workspace bring those pieces together.
