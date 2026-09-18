@@ -1,75 +1,94 @@
 # Gyan OS
 
-My portfolio, built as a desktop operating system that runs in the browser.
+Gyan Kashyap’s portfolio, presented as an interactive desktop in your browser.
+Open apps from the dock, explore projects, read about the work, or use the study
+timer. **Aizen is a local model demo. No hosted backend or website deployment is
+configured.**
 
-Not a page you scroll — a desktop you use. There's a window manager with real
-dragging and resizing, a dock that magnifies, global search, live wallpapers you
-can replace with your own, and seven apps. One of those apps talks to a language
-model I wrote from scratch.
+![Gyan OS desktop with the Samurai Crimson Gaze wallpaper](docs/screenshots/desktop.png)
 
-```bash
-npm install
-npm run dev          # -> http://localhost:5173
+## Run locally
+
+Requires **Node.js 24+** and npm.
+
+```sh
+git clone https://github.com/GyanxKashyap/gyan-os.git
+cd gyan-os
+npm ci
+npm run dev
 ```
 
----
+Open **http://127.0.0.1:5173**. Keep using the same address and port to retain the
+same browser storage. Stop the server with `Ctrl+C`.
 
-## The apps
+The portfolio works without a model server. For live Chat and Story, follow the
+[Aizen local demo guide](docs/AIZEN_LOCAL_DEMO.md).
 
-| app | what it is |
-|---|---|
-| **Aizen** | Chat and story generation against my own 40M-parameter LLM, plus its benchmark, training phases and model card |
-| **Projects** | Finder-style browser for the eleven things I have built |
-| **About Me** | Who I am, the timeline, what I actually know |
-| **Lab** | Training timeline, real loss curves from the metrics CSVs, every checkpoint, every dataset |
-| **Knowledge** | Notes on what I learned building all of it |
-| **Timer** | My native macOS study timer, ported to run inside the OS — it keeps its own brutalist look on purpose |
-| **Settings** | Wallpapers, accent colours, animation and transparency toggles |
+## Explore
 
-## Aizen needs a backend
+| App | What you can do |
+| --- | --- |
+| Aizen | Try local Chat and Story; inspect model details, benchmark results and training history |
+| Projects | Browse 10 projects, supplied screenshots, source links and verified demo links |
+| About Me | Read Gyan’s profile, skills, journey and interests |
+| Lab | Explore recorded training phases, loss curves, versions and datasets |
+| Knowledge | Read project notes by category |
+| Timer | Run countdown/open sessions, review study history and keep notes locally |
+| Settings | Choose wallpapers, motion preferences, dock behavior and check Aizen’s connection |
 
-The Aizen app is wired to a real model, not a canned script. It expects
-[the Aizen server](https://github.com/GyanxKashyap/aizen) on port 8321, which
-`vite.config.ts` proxies for `/chat`, `/story` and `/meta`.
+Trash is a decorative desktop app; it does not manage your computer’s files.
 
-Without it the app says so — it shows an honest offline state rather than
-faking a reply. Nothing in this repository invents a model response.
+![Projects inside Gyan OS](docs/screenshots/projects.png)
 
-Note that the proxy is a **dev-server** feature. A static build has no backend,
-so a deployed copy shows Aizen offline unless the server is hosted too.
+## Desktop controls
 
-## How it is put together
+- Click a dock icon to open or restore an app. Double-click the desktop Projects
+  icon with a mouse, or tap it on a touch device.
+- Drag a title bar to move a window and its bottom-right corner to resize it.
+- Red closes, yellow minimizes, and green maximizes/restores a window. Minimizing
+  preserves the app’s current state; closing resets transient views and drafts.
+- Use Search or `⌘K` / `Ctrl+K` to find apps, projects and notes. Arrow keys select
+  a result, Enter opens it, and Escape closes search.
+- Window menu actions provide minimize, zoom and close controls. Browsers may
+  reserve `⌘W`/`Ctrl+W`; use the red button when that shortcut closes a browser tab.
+- On narrow/touch screens the dock stays visible and scrolls sideways. Category
+  and tab strips scroll when needed.
 
-- **Vite + React 19 + TypeScript**, Tailwind v4 through `@tailwindcss/vite`
-- **zustand** for window state (`src/store/windows.ts`) — geometry, z-order and
-  a z-counter; settings and custom wallpapers persist to localStorage and
-  IndexedDB
-- **motion** for the dock springs and window transitions
-- Apps deep-link to each other through intents: `open(appId, intent)` plus the
-  `useIntent` hook, which is how search results land on the right tab
-- Every Aizen number in `src/data/` is generated from the training repo's real
-  `results/*.json` — including the two places the score went *down*
+**Samurai Crimson Gaze** is the default wallpaper for fresh installs. Existing
+saved choices remain intact. Turn off Live wallpaper or Animations for its still
+image; system reduced-motion preferences also take precedence.
 
+## Data and privacy
+
+Settings use `localStorage`. Custom wallpapers and Timer records use IndexedDB.
+Data stays in the current browser profile and origin, without accounts or cloud
+sync. Clearing site data removes it. Chat drafts and window layout are transient.
+Chat/Story requests go to the separately running local Aizen server. The default
+wallpaper is bundled; Inter is requested from Google Fonts with system fallbacks.
+
+## Development checks
+
+```sh
+npm test
+npm run lint
+npm run build
+npm run preview
 ```
-src/
-  desktop/   menu bar, dock, windows, icons, search, wallpaper
-  apps/      the seven applications
-  store/     windows, settings, notifications, custom wallpapers
-  data/      projects, about, knowledge, aizen, loss curves
-  assets/    icons and project screenshots
-```
 
-## Two rules I held to
+Tests exercise window geometry/focus, streaming UTF-8 and backend failures, and
+Timer recovery/accounting. The production build goes to `dist/`. Preview serves
+it locally; it does not publish a site. CI runs checks only, without deployment.
 
-**No invented numbers.** Every benchmark score, parameter count and training
-detail comes from a real result file. The benchmark chart shows v4 and v5
-dipping, because they did.
+## Documentation
 
-**No faked intelligence.** Aizen's replies come from the model or they do not
-come at all.
-
----
+- [Local Aizen setup and troubleshooting](docs/AIZEN_LOCAL_DEMO.md)
+- [Architecture and persistence](docs/ARCHITECTURE.md)
+- [Editing content, screenshots and wallpapers](docs/CONTENT_GUIDE.md)
+- [Verification and your review checklist](docs/TESTING.md)
+- [Asset credits](docs/ASSETS.md)
+- [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+Source code is under [MIT](LICENSE). Media assets and depicted third-party
+projects retain their respective rights; see [asset credits](docs/ASSETS.md).

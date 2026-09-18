@@ -47,7 +47,10 @@ GitHub Actions runs these checks on pushes and pull requests; it does not deploy
 
 On 2026-09-18: all 15 tests, lint and the production build passed. Browser checks
 covered phone/tablet bounds, draft preservation, wallpaper and motion controls,
-project image loading, and local Chat/Story generation. Screenshots in
+project image loading, and local Chat/Story generation. A one-minute countdown
+also completed while minimized in the isolated production-preview origin and
+saved exactly one completed one-minute session. Its browser logs had no errors
+or warnings. Screenshots in
 `screenshots/` document the actual UI, not design mockups.
 
 These checks do not establish behavior on every physical device, multi-tab Timer
