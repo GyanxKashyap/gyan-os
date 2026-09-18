@@ -116,6 +116,10 @@ function rank(q: string): Result[] {
 }
 
 export function Search({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return <AnimatePresence>{open && <SearchPanel key="search" onClose={onClose} />}</AnimatePresence>
+}
+
+function SearchPanel({ onClose }: { onClose: () => void }) {
   const reduceMotion = useMotionPreferences()
   const [q, setQ] = useState('')
   const [sel, setSel] = useState(0)
@@ -125,12 +129,10 @@ export function Search({ open, onClose }: { open: boolean; onClose: () => void }
   const results = useMemo(() => rank(q), [q])
 
   useEffect(() => {
-    if (open) {
-      setQ('')
-      setSel(0)
-      setTimeout(() => inputRef.current?.focus(), 30)
-    }
-  }, [open])
+    const previousFocus = document.activeElement as HTMLElement | null
+    inputRef.current?.focus()
+    return () => previousFocus?.focus()
+  }, [])
 
 
   const launch = (r: Result) => {
@@ -141,7 +143,7 @@ export function Search({ open, onClose }: { open: boolean; onClose: () => void }
   const onKey = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setSel((s) => Math.min(s + 1, results.length - 1))
+      setSel((s) => Math.max(0, Math.min(s + 1, results.length - 1)))
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       setSel((s) => Math.max(s - 1, 0))
@@ -153,8 +155,7 @@ export function Search({ open, onClose }: { open: boolean; onClose: () => void }
   }
 
   return (
-    <AnimatePresence>
-      {open && (
+    <>
         <motion.div
           className="absolute inset-0 z-[6000] flex items-start justify-center bg-black/15 pt-[18vh]"
           initial={reduceMotion ? false : { opacity: 0 }}
@@ -218,7 +219,6 @@ export function Search({ open, onClose }: { open: boolean; onClose: () => void }
             )}
           </motion.div>
         </motion.div>
-      )}
-    </AnimatePresence>
+    </>
   )
 }

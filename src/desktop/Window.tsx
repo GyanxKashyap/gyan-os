@@ -57,7 +57,7 @@ export function Window({ win, isActive }: { win: WinState; isActive: boolean }) 
             onLostPointerCapture={onTitlePointerUp}
             onDoubleClick={() => toggleMaximize(win.appId)}
           >
-            <div className="group flex items-center gap-2" onPointerDown={(e) => e.stopPropagation()}>
+            <div className="group flex items-center gap-2" onPointerDown={(e) => e.stopPropagation()} onDoubleClick={(e) => e.stopPropagation()}>
               <TrafficButton color="#e8756d" label={`Close ${app.title}`} onClick={() => close(win.appId)} glyph="close" dim={!isActive} />
               <TrafficButton color="#e9b45c" label={`Minimize ${app.title}`} onClick={() => minimize(win.appId)} glyph="min" dim={!isActive} />
               <TrafficButton color="#8fbf6f" label={`Maximize ${app.title}`} onClick={() => toggleMaximize(win.appId)} glyph="max" dim={!isActive} />

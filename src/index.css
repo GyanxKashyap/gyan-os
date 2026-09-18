@@ -162,3 +162,11 @@ body,
 }
 
 .window-body code, .window-body p { overflow-wrap: anywhere; }
+
+/* Shared keyboard focus stays visible against glass and dark wallpaper. */
+button:focus-visible, a:focus-visible, [role="separator"]:focus-visible {
+  outline: 2px solid var(--color-lavender-deep); outline-offset: 3px;
+}
+
+/* Keep app content readable over detailed video wallpapers. */
+.os-window.glass { background: rgba(250, 247, 244, 0.93); }
