@@ -56,8 +56,8 @@ export function AizenApp() {
 function StatusPill({ status }: { status: Status }) {
   const cfg = {
     checking: { dot: 'bg-ink-soft/50', text: 'checking…' },
-    online: { dot: 'bg-[#7dab5c]', text: 'model online' },
-    offline: { dot: 'bg-[#c9c4cf]', text: 'model offline' },
+    online: { dot: 'bg-[#7dab5c]', text: 'local demo online' },
+    offline: { dot: 'bg-[#c9c4cf]', text: 'local demo offline' },
   }[status]
   return (
     <span className="flex items-center gap-1.5 rounded-full bg-black/5 px-2.5 py-1 text-[11px] font-medium text-ink-soft">
@@ -166,7 +166,7 @@ function Chat({ status, onStatus }: { status: Status; onStatus: (s: Status) => v
               ))}
             </div>
             <p className="max-w-md text-[11px] leading-relaxed text-ink-soft/80">
-              Aizen is a ~40M-parameter model trained from scratch — short questions work best:
+              Aizen is a local ~40M-parameter model trained from scratch — short questions work best:
               arithmetic, facts, logic, small talk. It remembers the last few turns, so follow-ups like
               “and plus 3?” work.
             </p>
