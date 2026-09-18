@@ -1,24 +1,19 @@
 import { create } from 'zustand'
-import { appById } from '../lib/apps'
+import { appById } from '../lib/apps.ts'
+import { fitWindow, workspaceBounds, type Geometry } from '../lib/windowGeometry.ts'
 
-export interface WinState {
+export interface WinState extends Geometry {
   appId: string
-  x: number
-  y: number
-  w: number
-  h: number
   z: number
   minimized: boolean
   maximized: boolean
-  /** saved geometry to restore from maximize */
-  prev?: { x: number; y: number; w: number; h: number }
+  prev?: Geometry
 }
 
 interface WindowStore {
   windows: Record<string, WinState>
-  order: string[] // open appIds, back → front
+  order: string[]
   nextZ: number
-  /** deep-link payload for the app being opened (e.g. a tab name or item id) */
   intents: Record<string, { value: string; nonce: number }>
   open: (appId: string, intent?: string) => void
   close: (appId: string) => void
@@ -27,148 +22,93 @@ interface WindowStore {
   toggleMaximize: (appId: string) => void
   move: (appId: string, x: number, y: number) => void
   resize: (appId: string, w: number, h: number) => void
+  fitViewport: () => void
   closeActive: () => void
   minimizeActive: () => void
   activeApp: () => string | null
 }
 
-const MENUBAR = 34
-const DOCK = 96
-
-let spawnCount = 0
-
-function spawnPos(w: number, h: number) {
-  const vw = window.innerWidth
-  const vh = window.innerHeight - MENUBAR - DOCK
-  const offset = (spawnCount++ % 6) * 28
+// Normalize z-order on every focus change so windows never overtake shell menus.
+function stacking(order: string[], windows: Record<string, WinState>) {
   return {
-    x: Math.max(12, (vw - w) / 2 + offset),
-    y: Math.max(MENUBAR + 8, MENUBAR + (vh - h) / 2 + offset * 0.7),
+    order,
+    windows: Object.fromEntries(order.map((id, i) => [id, { ...windows[id], z: 100 + i }])),
+    nextZ: 100 + order.length,
   }
 }
 
 export const useWindows = create<WindowStore>((set, get) => ({
-  windows: {},
-  order: [],
-  nextZ: 100,
-  intents: {},
-
+  windows: {}, order: [], nextZ: 100, intents: {},
   open: (appId, intent) => {
-    const { windows, order, nextZ, intents } = get()
     const app = appById(appId)
     if (!app) return
-    if (intent !== undefined) {
-      set({ intents: { ...intents, [appId]: { value: intent, nonce: (intents[appId]?.nonce ?? 0) + 1 } } })
-    }
-    if (windows[appId]) {
-      // already open: unminimize + focus
-      set({
-        windows: { ...windows, [appId]: { ...windows[appId], minimized: false, z: nextZ } },
-        order: [...order.filter((id) => id !== appId), appId],
-        nextZ: nextZ + 1,
-      })
-      return
-    }
-    const { w, h } = app.defaultSize
-    const { x, y } = spawnPos(w, h)
-    set({
-      windows: { ...windows, [appId]: { appId, x, y, w, h, z: nextZ, minimized: false, maximized: false } },
-      order: [...order, appId],
-      nextZ: nextZ + 1,
+    const { windows, order, intents } = get()
+    const bounds = workspaceBounds()
+    const offset = (order.length % 6) * 24
+    const geometry = fitWindow({
+      ...app.defaultSize,
+      x: bounds.x + (bounds.w - app.defaultSize.w) / 2 + offset,
+      y: bounds.y + (bounds.h - app.defaultSize.h) / 2 + offset,
     })
-  },
-
-  close: (appId) => {
-    const { windows, order } = get()
-    const rest = { ...windows }
-    delete rest[appId]
-    set({ windows: rest, order: order.filter((id) => id !== appId) })
-  },
-
-  focus: (appId) => {
-    const { windows, order, nextZ } = get()
-    if (!windows[appId]) return
+    const win = windows[appId]
     set({
-      windows: { ...windows, [appId]: { ...windows[appId], z: nextZ } },
-      order: [...order.filter((id) => id !== appId), appId],
-      nextZ: nextZ + 1,
-    })
-  },
-
-  minimize: (appId) => {
-    const { windows } = get()
-    if (!windows[appId]) return
-    set({ windows: { ...windows, [appId]: { ...windows[appId], minimized: true } } })
-  },
-
-  toggleMaximize: (appId) => {
-    const { windows, nextZ } = get()
-    const win = windows[appId]
-    if (!win) return
-    if (win.maximized) {
-      const prev = win.prev ?? { x: 40, y: MENUBAR + 20, w: 640, h: 480 }
-      set({
-        windows: {
-          ...windows,
-          [appId]: { ...win, ...prev, maximized: false, prev: undefined, z: nextZ },
-        },
-        nextZ: nextZ + 1,
-      })
-    } else {
-      set({
-        windows: {
-          ...windows,
-          [appId]: {
-            ...win,
-            prev: { x: win.x, y: win.y, w: win.w, h: win.h },
-            x: 8,
-            y: MENUBAR + 6,
-            w: window.innerWidth - 16,
-            h: window.innerHeight - MENUBAR - 14,
-            maximized: true,
-            z: nextZ,
-          },
-        },
-        nextZ: nextZ + 1,
-      })
-    }
-  },
-
-  move: (appId, x, y) => {
-    const { windows } = get()
-    const win = windows[appId]
-    if (!win) return
-    set({ windows: { ...windows, [appId]: { ...win, x, y } } })
-  },
-
-  resize: (appId, w, h) => {
-    const { windows } = get()
-    const win = windows[appId]
-    if (!win) return
-    set({
-      windows: {
+      ...stacking([...order.filter((id) => id !== appId), appId], {
         ...windows,
-        [appId]: { ...win, w: Math.max(340, w), h: Math.max(240, h), maximized: false },
+        [appId]: win ? { ...win, minimized: false } : { ...geometry, appId, z: 100, minimized: false, maximized: false },
+      }),
+      intents: intent === undefined ? intents : {
+        ...intents, [appId]: { value: intent, nonce: (intents[appId]?.nonce ?? 0) + 1 },
       },
     })
   },
-
+  close: (appId) => {
+    const { windows, order, intents } = get()
+    const remainingIntents = { ...intents }
+    delete remainingIntents[appId]
+    set({ ...stacking(order.filter((id) => id !== appId), windows), intents: remainingIntents })
+  },
+  focus: (appId) => {
+    const { windows, order } = get()
+    if (!windows[appId] || (order.at(-1) === appId && !windows[appId].minimized)) return
+    set(stacking([...order.filter((id) => id !== appId), appId], {
+      ...windows, [appId]: { ...windows[appId], minimized: false },
+    }))
+  },
+  minimize: (appId) => {
+    const { windows } = get()
+    if (windows[appId]) set({ windows: { ...windows, [appId]: { ...windows[appId], minimized: true } } })
+  },
+  toggleMaximize: (appId) => {
+    const { windows, order } = get()
+    const win = windows[appId]
+    if (!win) return
+    const geometry = win.maximized ? fitWindow(win.prev ?? win) : workspaceBounds()
+    set(stacking([...order.filter((id) => id !== appId), appId], {
+      ...windows,
+      [appId]: {
+        ...win, ...geometry, minimized: false, maximized: !win.maximized,
+        prev: win.maximized ? undefined : { x: win.x, y: win.y, w: win.w, h: win.h },
+      },
+    }))
+  },
+  move: (appId, x, y) => {
+    const { windows } = get(); const win = windows[appId]
+    if (win && !win.maximized) set({ windows: { ...windows, [appId]: { ...win, ...fitWindow({ ...win, x, y }) } } })
+  },
+  resize: (appId, w, h) => {
+    const { windows } = get(); const win = windows[appId]
+    if (win) set({ windows: { ...windows, [appId]: { ...win, ...fitWindow({ ...win, w, h }), maximized: false } } })
+  },
+  fitViewport: () => {
+    set({ windows: Object.fromEntries(Object.entries(get().windows).map(([id, win]) => [id, {
+      ...win, ...(win.maximized ? workspaceBounds() : fitWindow(win)),
+      prev: win.prev ? fitWindow(win.prev) : undefined,
+    }])) })
+  },
   activeApp: () => {
     const { order, windows } = get()
-    for (let i = order.length - 1; i >= 0; i--) {
-      const id = order[i]
-      if (windows[id] && !windows[id].minimized) return id
-    }
-    return null
+    return [...order].reverse().find((id) => !windows[id].minimized) ?? null
   },
-
-  closeActive: () => {
-    const id = get().activeApp()
-    if (id) get().close(id)
-  },
-
-  minimizeActive: () => {
-    const id = get().activeApp()
-    if (id) get().minimize(id)
-  },
+  closeActive: () => { const id = get().activeApp(); if (id) get().close(id) },
+  minimizeActive: () => { const id = get().activeApp(); if (id) get().minimize(id) },
 }))
