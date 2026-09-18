@@ -60,6 +60,7 @@ export function useStudyTimer() {
           await finalize(recovered, 'completed')
           return
         }
+        setNow(Date.now())
         setActive(recovered)
       })
       .catch(() => setStorageMessage('Local storage is unavailable in this browser context.'))
@@ -71,10 +72,15 @@ export function useStudyTimer() {
 
   useEffect(() => {
     if (active?.state !== 'running') return
-    setNow(Date.now())
-    const interval = window.setInterval(() => setNow(Date.now()), 1000)
+    const interval = window.setInterval(() => {
+      const timestamp = Date.now()
+      setNow(timestamp)
+      if (timerMode(active) === 'countdown' && remainingDuration(active, timestamp) <= 0) {
+        void finalize(active, 'completed')
+      }
+    }, 1000)
     return () => window.clearInterval(interval)
-  }, [active?.id, active?.state])
+  }, [active, finalize])
 
   const displayMs = useMemo(
     () => active
@@ -84,17 +90,6 @@ export function useStudyTimer() {
       : 0,
     [active, now],
   )
-
-  useEffect(() => {
-    if (
-      active &&
-      timerMode(active) === 'countdown' &&
-      active.state === 'running' &&
-      displayMs <= 0
-    ) {
-      void finalize(active, 'completed')
-    }
-  }, [active, displayMs, finalize])
 
   useEffect(() => {
     if (active?.state !== 'running' || document.visibilityState !== 'visible') return
@@ -130,6 +125,7 @@ export function useStudyTimer() {
     if (!active) return
     const next = pauseSession(active)
     await saveActiveSession(next)
+    setNow(Date.now())
     setActive(next)
   }, [active])
 
