@@ -23,7 +23,7 @@ export function LabApp() {
   )
   return (
     <div className="flex h-full flex-col">
-      <nav className="flex shrink-0 gap-1 border-b border-black/5 px-3 py-2">
+      <nav className="app-tabs flex shrink-0 gap-1 border-b border-black/5 px-3 py-2">
         {TABS.map((t) => (
           <button
             key={t}

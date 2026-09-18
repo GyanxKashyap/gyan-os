@@ -27,7 +27,7 @@ export function KnowledgeApp() {
   const list = NOTES.filter((n) => cat === 'All' || n.category === cat)
 
   return (
-    <div className="flex h-full">
+    <div className="portfolio-browser flex h-full">
       <aside className="w-44 shrink-0 space-y-0.5 border-r border-black/5 bg-white/25 p-2">
         <p className="px-2 pb-1 pt-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-ink-soft">
           Library

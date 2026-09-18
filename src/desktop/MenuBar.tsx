@@ -1,3 +1,4 @@
+import { useMediaQuery } from '../lib/useMotionPreferences'
 import { useEffect, useRef, useState } from 'react'
 
 interface BatteryManager extends EventTarget {
@@ -127,6 +128,9 @@ export function MenuBar({ onSearch }: { onSearch: () => void }) {
     ],
   }
 
+  const compact = useMediaQuery('(max-width: 639px)')
+  const visibleMenus = compact ? { Menu: [...menus.File, { divider: true } as MenuEntry, ...menus.View, { divider: true } as MenuEntry, ...menus.Window, { divider: true } as MenuEntry, ...menus.Help] } : menus
+
   const time = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
   const date = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })
 
@@ -136,8 +140,8 @@ export function MenuBar({ onSearch }: { onSearch: () => void }) {
       className="chrome-glass absolute inset-x-0 top-0 z-[5000] flex h-[34px] items-center gap-1 border-x-0 border-t-0 px-3 text-[13px] whitespace-nowrap"
     >
       <span className="px-2 font-semibold tracking-tight text-ink">Gyan OS</span>
-      {activeTitle && <span className="px-1 font-medium text-ink">{activeTitle}</span>}
-      {Object.keys(menus).map((m) => (
+      {activeTitle && <span className="max-w-28 truncate px-1 font-medium text-ink">{activeTitle}</span>}
+      {Object.keys(visibleMenus).map((m) => (
         <div key={m} className="relative">
           <button
             onClick={() => setOpenMenu(openMenu === m ? null : m)}
@@ -151,8 +155,8 @@ export function MenuBar({ onSearch }: { onSearch: () => void }) {
             {m}
           </button>
           {openMenu === m && (
-            <div className="absolute left-0 top-[30px]">
-              <MenuPanel entries={menus[m]} onClose={() => setOpenMenu(null)} />
+            <div className={compact ? "fixed left-2 top-[36px] right-2" : "absolute left-0 top-[30px]"}>
+              <MenuPanel entries={visibleMenus[m]} onClose={() => setOpenMenu(null)} />
             </div>
           )}
         </div>
@@ -181,7 +185,7 @@ export function MenuBar({ onSearch }: { onSearch: () => void }) {
         </svg>
       </span>
       <span
-        className="flex items-center gap-1 p-1.5 text-ink-soft"
+        className="hidden sm:flex items-center gap-1 p-1.5 text-ink-soft"
         title={
           battery
             ? `Battery: ${Math.round(battery.level * 100)}%${battery.charging ? ' — charging' : ''}`
@@ -208,7 +212,7 @@ export function MenuBar({ onSearch }: { onSearch: () => void }) {
         </svg>
       </span>
       <span className="px-2 font-medium tabular-nums text-ink">
-        {date}&ensp;{time}
+        <span className="hidden md:inline">{date}&ensp;</span>{time}
       </span>
     </header>
   )

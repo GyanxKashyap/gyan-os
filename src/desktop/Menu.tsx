@@ -1,3 +1,4 @@
+import { useMotionPreferences } from '../lib/useMotionPreferences'
 import { motion } from 'motion/react'
 
 export interface MenuEntry {
@@ -11,12 +12,13 @@ export interface MenuEntry {
 
 /** Shared dropdown/context menu panel. Parent handles positioning + outside-click. */
 export function MenuPanel({ entries, onClose }: { entries: MenuEntry[]; onClose: () => void }) {
+  const reduceMotion = useMotionPreferences()
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.97, y: -4 }}
+      initial={reduceMotion ? false : { opacity: 0, scale: 0.97, y: -4 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ type: 'spring', bounce: 0, duration: 0.18 }}
-      className="glass min-w-[190px] rounded-xl p-1 shadow-[0_16px_44px_-10px_rgba(30,20,50,0.4)]"
+      transition={reduceMotion ? { duration: 0 } : { type: 'spring', bounce: 0, duration: 0.18 }}
+      className="glass max-h-[calc(100dvh-60px)] overflow-y-auto min-w-[190px] rounded-xl p-1 shadow-[0_16px_44px_-10px_rgba(30,20,50,0.4)]"
       style={{ transformOrigin: 'top left' }}
       role="menu"
     >

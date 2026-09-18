@@ -1,3 +1,4 @@
+import { useMediaQuery } from '../lib/useMotionPreferences'
 import { APPS } from '../lib/apps'
 import { AppIcon } from './AppIcon'
 import { useWindows } from '../store/windows'
@@ -6,6 +7,7 @@ import { useWindows } from '../store/windows'
 const DESKTOP_APP_IDS = ['projects']
 
 export function DesktopIcons() {
+  const touch = useMediaQuery('(hover: none)')
   const open = useWindows((s) => s.open)
 
   const items = APPS.filter((a) => DESKTOP_APP_IDS.includes(a.id)).map((a) => ({
@@ -22,7 +24,7 @@ export function DesktopIcons() {
         <button
           key={item.id}
           onDoubleClick={item.action}
-          onClick={(e) => e.detail === 1 && e.currentTarget.focus()}
+          onClick={(e) => touch ? item.action() : e.currentTarget.focus()}
           onKeyDown={(e) => e.key === 'Enter' && item.action()}
           className="flex w-[86px] flex-col items-center gap-1 rounded-xl p-2 outline-none transition-colors hover:bg-white/15 focus-visible:bg-white/25 focus-visible:ring-2 focus-visible:ring-white/60"
           aria-label={`Open ${item.title}`}

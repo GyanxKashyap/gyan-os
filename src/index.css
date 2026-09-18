@@ -135,3 +135,30 @@ body,
     backdrop-filter: none;
   }
 }
+
+/* Respond to the actual window width, including desktop window resizing. */
+.window-body { container-type: inline-size; container-name: app-window; }
+.app-tabs { overflow-x: auto; }
+.app-tabs > * { flex-shrink: 0; white-space: nowrap; }
+.portfolio-browser > div { min-width: 0; }
+@container app-window (max-width: 520px) {
+  .portfolio-browser { flex-direction: column; }
+  .portfolio-browser > aside { display: flex; width: 100%; overflow-x: auto; gap: 4px; border-right: 0; border-bottom: 1px solid #0000000d; }
+  .portfolio-browser > aside > p { display: none; }
+  .portfolio-browser > aside > button { width: auto; flex-shrink: 0; gap: 8px; white-space: nowrap; margin: 0; }
+  .project-grid { grid-template-columns: minmax(0, 1fr); }
+  .about-intro { flex-direction: column; }
+  .about-intro > img { width: 100%; max-width: 200px; align-self: center; }
+}
+@media (max-width: 639px), (hover: none) {
+  .dock-items { max-width: calc(100vw - 16px); overflow-x: auto; gap: 14px; padding: 10px 14px; }
+  .dock-items > div { flex-shrink: 0; gap: 14px; }
+  .os-dock [role="tooltip"], .os-dock button > span:first-child { display: none; }
+  .traffic-button { width: 28px; height: 28px; border: 7px solid transparent; background-clip: padding-box; box-shadow: none; }
+  .traffic-button svg { opacity: 1; }
+  .window-titlebar > .group { gap: 2px; }
+  .window-titlebar > span:last-child { width: 86px; flex-shrink: 0; }
+  .window-titlebar { padding-inline: 8px; }
+}
+
+.window-body code, .window-body p { overflow-wrap: anywhere; }
