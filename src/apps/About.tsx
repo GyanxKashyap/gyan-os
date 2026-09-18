@@ -142,7 +142,7 @@ export function AboutApp() {
         </div>
       </header>
 
-      <nav className="flex shrink-0 gap-1 border-b border-black/5 px-4 py-2">
+      <nav className="app-tabs flex shrink-0 gap-1 border-b border-black/5 px-4 py-2">
         {TABS.map((t) => (
           <button
             key={t}
@@ -169,7 +169,7 @@ export function AboutApp() {
 function AboutTab() {
   return (
     <div className="mx-auto max-w-lg space-y-4 px-6 py-6">
-      <div className="flex items-start gap-5">
+      <div className="about-intro flex items-start gap-5">
         <div className="min-w-0 flex-1 space-y-4">
           <p className="text-[15px] leading-relaxed">{about.intro}</p>
           <p className="text-[13.5px] leading-relaxed text-ink-soft">{about.now}</p>
@@ -199,54 +199,30 @@ function AboutTab() {
 }
 
 function SkillsTab() {
-  const s = about.skills
   return (
     <div className="mx-auto max-w-lg space-y-5 px-6 py-6">
-      <section>
-        <h2 className="text-[12px] font-semibold uppercase tracking-wider text-ink-soft">Strongest</h2>
-        <div className="mt-2 space-y-2">
-          {s.strong.map((k) => (
-            <SkillRow key={k.name} name={k.name} note={k.note} level={3} />
-          ))}
-        </div>
-      </section>
-      <section>
-        <h2 className="text-[12px] font-semibold uppercase tracking-wider text-ink-soft">Working with</h2>
-        <div className="mt-2 space-y-2">
-          {s.working.map((k) => (
-            <SkillRow key={k.name} name={k.name} note={k.note} level={2} />
-          ))}
-        </div>
-      </section>
-      <section>
-        <h2 className="text-[12px] font-semibold uppercase tracking-wider text-ink-soft">
-          Familiar with
-        </h2>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {s.familiar.map((k) => (
-            <span key={k} className="rounded-lg bg-black/5 px-2.5 py-1 text-[12.5px] font-medium text-ink-soft">
-              {k}
-            </span>
-          ))}
-        </div>
-        <p className="mt-2 text-[11.5px] text-ink-soft/80">
-          Used in real projects, still learning the depths.
-        </p>
-      </section>
+      <p className="text-[13px] leading-relaxed text-ink-soft">
+        The languages and tools I’m learning and building with — from my GitHub profile and projects.
+      </p>
+      {about.skills.map((group) => (
+        <section key={group.title}>
+          <h2 className="text-[12px] font-semibold uppercase tracking-wider text-ink-soft">{group.title}</h2>
+          <div className="mt-2 space-y-2">
+            {group.items.map((skill) => (
+              <SkillRow key={skill.name} name={skill.name} note={skill.note} />
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   )
 }
 
-function SkillRow({ name, note, level }: { name: string; note: string; level: number }) {
+function SkillRow({ name, note }: { name: string; note: string }) {
   return (
     <div className="flex items-center gap-3 rounded-xl border border-black/8 bg-white/50 px-4 py-2.5">
       <span className="w-28 shrink-0 text-[13px] font-semibold">{name}</span>
-      <span className="flex gap-1">
-        {[1, 2, 3].map((n) => (
-          <span key={n} className={`h-1.5 w-5 rounded-full ${n <= level ? 'bg-lavender-deep' : 'bg-black/10'}`} />
-        ))}
-      </span>
-      <span className="min-w-0 flex-1 truncate text-[12px] text-ink-soft">{note}</span>
+      <span className="min-w-0 flex-1 text-[12px] leading-relaxed text-ink-soft">{note}</span>
     </div>
   )
 }

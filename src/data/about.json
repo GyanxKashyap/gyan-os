@@ -1,17 +1,17 @@
 {
-  "name": "Gyan",
-  "role": "Student · Builder",
+  "name": "Gyan Kashyap",
+  "role": "Student Developer · AI & Tech",
   "location": "Ghazipur, India",
   "age": 18,
-  "intro": "I really like to discover and build. That's why, instead of calling an API, I built a language model from scratch — every layer, the tokenizer, the training loop, all of it, on my own laptop.",
-  "now": "Right now my studies come first: I'm preparing for JEE-Mains to get into college next year. Building happens around them — one project, one experiment at a time.",
+  "intro": "I'm a student developer learning through vibe-coding and building projects. I build for the love of games and the curiosity to turn my ideas into something real — from useful everyday tools to experiments with AI.",
+  "now": "Right now, I'm learning AI/ML, experimenting with language models and neural networks, building tools for macOS, and exploring game development and interactive web interfaces.",
   "interests": [
-    "AI",
-    "Algorithms",
-    "Game dev",
-    "Gaming",
-    "Physics",
-    "Cinema"
+    "AI & machine learning",
+    "Language models",
+    "macOS tools",
+    "Game development",
+    "Interactive websites",
+    "UI/UX"
   ],
   "contacts": [
     {
@@ -39,73 +39,114 @@
       "icon": "instagram"
     }
   ],
-  "skills": {
-    "strong": [
-      {
-        "name": "Python",
-        "note": "my best language — Aizen is built with it"
-      },
-      {
-        "name": "HTML & CSS",
-        "note": "most of my apps and games ship with it"
-      }
-    ],
-    "working": [
-      {
-        "name": "JavaScript",
-        "note": "games, apps and experiments"
-      }
-    ],
-    "familiar": [
-      "TypeScript",
-      "React",
-      "PyTorch",
-      "Rust / Tauri",
-      "Three.js"
-    ]
-  },
+  "skills": [
+    {
+      "title": "Languages",
+      "items": [
+        {
+          "name": "HTML & CSS",
+          "note": "Web interfaces, productivity tools, and browser games."
+        },
+        {
+          "name": "JavaScript",
+          "note": "Interactive websites, game mechanics, and web experiments."
+        },
+        {
+          "name": "Python",
+          "note": "Aizen’s model, tokenizer, training, and evaluation."
+        },
+        {
+          "name": "TypeScript",
+          "note": "The React interfaces in Timer App and AI Chatbot."
+        },
+        {
+          "name": "Java",
+          "note": "Part of my learning toolkit on GitHub."
+        }
+      ]
+    },
+    {
+      "title": "Frameworks & runtimes",
+      "items": [
+        {
+          "name": "React",
+          "note": "Component-based interfaces for apps and experiments."
+        },
+        {
+          "name": "PyTorch",
+          "note": "Exploring neural networks and building Aizen."
+        },
+        {
+          "name": "Node.js",
+          "note": "JavaScript tooling and app development."
+        }
+      ]
+    },
+    {
+      "title": "AI coding tools",
+      "items": [
+        {
+          "name": "Claude & Codex",
+          "note": "AI-assisted building and learning through projects."
+        },
+        {
+          "name": "Qwen & Cursor",
+          "note": "Tools in my vibe-coding workflow."
+        }
+      ]
+    },
+    {
+      "title": "Development tools",
+      "items": [
+        {
+          "name": "Git & GitHub",
+          "note": "Version control, sharing source, and documenting projects."
+        },
+        {
+          "name": "VS Code",
+          "note": "My development toolkit includes Visual Studio Code."
+        }
+      ]
+    }
+  ],
   "journey": [
     {
-      "title": "First contact",
-      "detail": "Started coding in 7th class — and honestly, didn't like it. Writing programs felt like a chore, and I drifted away."
+      "title": "Learning by building",
+      "detail": "I’m a student developer exploring code through hands-on projects and AI-assisted development. Each project gives me something new to learn."
     },
     {
-      "title": "The comeback",
-      "detail": "Years later I tried again — and this time it clicked. I became genuinely fond of building things, and the journey properly started."
+      "title": "Tools for everyday focus",
+      "detail": "Lunar Focus, Habit OS, Prompt Lib, and Timer App explore different ways to support focus, organize ideas, and build useful personal tools."
     },
     {
-      "title": "Building in public",
-      "detail": "One project at a time: games, study timers, a prompt library, an AR experiment, a 3D AI assistant — 11 projects, each one teaching something new."
+      "title": "Games and interactive experiments",
+      "detail": "AirBound and Neon Snake explore browser gameplay. Limitless takes that curiosity into gesture control, AR techniques, and interactive effects."
     },
     {
-      "title": "Aizen",
-      "detail": "The big one — a language model built completely from scratch in PyTorch. From a character-level toy to a 40M-parameter model with its own BPE tokenizer and a frozen benchmark it climbed from 17% to 60.75%."
+      "title": "Exploring AI and language models",
+      "detail": "Aizen explores a Transformer, tokenizer, training, and evaluation in PyTorch. AI Chatbot explores conversational interfaces through JARVIS and FRIDAY."
     },
     {
-      "title": "Now",
-      "detail": "Preparing for JEE-Mains while keeping the builder's flame alive. College next year; the projects continue."
+      "title": "What comes next",
+      "detail": "Keep learning AI/ML, building macOS tools, creating games, and trying new ideas for the web."
     }
   ],
   "achievements": [
     {
-      "title": "Trained a language model from scratch — 17% → 60.75%",
-      "detail": "Built Aizen end to end in PyTorch and raised it from 17% to 60.75% on a frozen 400-question benchmark across eight documented phases — ending with a 40M-parameter model where every category hit an all-time high. No pretrained weights, no cloud GPUs — every run on a MacBook."
+      "title": "Built Aizen, a language model from scratch",
+      "detail": "A decoder-only Transformer in PyTorch with a custom BPE tokenizer, training loops, an evaluation harness, and a web interface. The repository documents a 40M-parameter model and a benchmark progression from 17% to 60.75%."
     },
     {
-      "title": "Wrote a BPE tokenizer from scratch",
-      "detail": "No libraries: pair counting, merges, a 4096-token vocabulary, with digits kept whole so arithmetic wouldn't break. Swapping it in lifted the same-size model from 28.75% to 35.75% — the same parameters, better spent."
+      "title": "Created a personal macOS study timer",
+      "detail": "Timer App brings together study sessions, local history, analysis, and sticky notes in a private desktop app."
     },
     {
-      "title": "Ran the experiments honestly",
-      "detail": "Froze the benchmark before the first improvement and never tuned against it. One training run per approved experiment. Set a hard 30–50M parameter cap up front and finished at 40M, so every gain had to come from data and method — and the one time scale was the variable, it was the only variable changed."
+      "title": "Built games and interactive experiments",
+      "detail": "AirBound, Neon Snake, and Limitless turn an interest in games into projects spanning browser gameplay and gesture-driven effects."
     },
     {
-      "title": "Built Gyan OS",
-      "detail": "This portfolio is a working desktop operating system in the browser — window manager, dock, seven apps, global search, live wallpapers, and a real connection to my own language model."
-    },
-    {
-      "title": "Shipped 11 projects while teaching myself",
-      "detail": "Games, study tools, an AR experiment, a 3D AI assistant — each one finished and published, self-taught, alongside school."
+      "title": "Explored conversational AI interfaces",
+      "detail": "AI Chatbot brings JARVIS and FRIDAY into a React interface with 3D avatars, conversation, and project-work panels."
     }
   ]
 }
