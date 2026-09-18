@@ -1,24 +1,16 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useSettings, ACCENTS, type WallpaperId } from '../store/settings'
 import { useCustomWallpapers } from '../store/customWallpapers'
 import { WALLPAPERS, WallpaperSvg } from '../desktop/Wallpaper'
+
+import { useAizenStatus } from '../store/aizen'
 
 export function SettingsApp() {
   const {
     wallpaper, accent, reduceMotion, liveWallpaper, dockAutoHide,
     setWallpaper, setAccent, setReduceMotion, setLiveWallpaper, setDockAutoHide,
   } = useSettings()
-  const [aizenStatus, setAizenStatus] = useState<'checking' | 'online' | 'offline'>('checking')
-
-  useEffect(() => {
-    let alive = true
-    fetch('/chat', { method: 'OPTIONS' })
-      .then((r) => alive && setAizenStatus(r.ok || r.status === 405 ? 'online' : 'offline'))
-      .catch(() => alive && setAizenStatus('offline'))
-    return () => {
-      alive = false
-    }
-  }, [])
+  const { status: aizenStatus, meta, refresh } = useAizenStatus()
 
   return (
     <div className="mx-auto max-w-lg space-y-6 px-6 py-5">
@@ -27,7 +19,7 @@ export function SettingsApp() {
 
         <div className="mt-2 rounded-2xl border border-black/8 bg-white/50 p-4">
           <p className="text-[12.5px] font-medium">Wallpaper</p>
-          <div className="mt-2 flex gap-3">
+          <div className="mt-2 flex flex-wrap gap-3">
             {(Object.keys(WALLPAPERS) as WallpaperId[]).map((id) => (
               <button
                 key={id}
@@ -105,8 +97,9 @@ export function SettingsApp() {
               {aizenStatus === 'checking' ? 'checking…' : aizenStatus}
             </span>
           </div>
+          <button onClick={() => void refresh()} disabled={aizenStatus === 'checking'} className="mt-2 text-xs underline disabled:opacity-50">Check connection</button>
           <div className="mt-3 space-y-1.5 text-[12px] text-ink-soft">
-            <p>Chat: <code className="rounded bg-black/5 px-1 py-0.5 text-[11px]">aizen_phase8.pt</code> (v6, ~40M) · Story: <code className="rounded bg-black/5 px-1 py-0.5 text-[11px]">aizen_phase8_pretrained.pt</code></p>
+            <p>Chat: <code className="rounded bg-black/5 px-1 py-0.5 text-[11px]">{meta?.checkpoint.split('/').pop() ?? 'aizen_phase8.pt'}</code> (v6, ~40M) · Story: <code className="rounded bg-black/5 px-1 py-0.5 text-[11px]">{meta?.story_checkpoint.split('/').pop() ?? 'aizen_phase8_pretrained.pt'}</code></p>
             <p>Generation: temperature 0.5 · top-k 20 — server defaults</p>
             <p className="text-[11px] text-ink-soft/80">
               Sliders arrive once the backend accepts per-request generation settings.

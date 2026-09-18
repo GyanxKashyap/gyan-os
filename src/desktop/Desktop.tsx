@@ -1,3 +1,4 @@
+import { useAizen } from '../store/aizen'
 import { useEffect, useState } from 'react'
 import { Wallpaper, WALLPAPERS } from './Wallpaper'
 import { MenuBar } from './MenuBar'
@@ -7,6 +8,7 @@ import { Window } from './Window'
 import { Search } from './Search'
 import { Notifications } from './Notifications'
 import { MenuPanel, type MenuEntry } from './Menu'
+import { useMotionPreferences } from '../lib/useMotionPreferences'
 import { useWindows } from '../store/windows'
 import { useSettings, type WallpaperId } from '../store/settings'
 import { useNotifications } from '../store/notifications'
@@ -16,7 +18,7 @@ export function Desktop() {
   const windows = useWindows((s) => s.windows)
   const order = useWindows((s) => s.order)
   const accent = useSettings((s) => s.accent)
-  const reduceMotion = useSettings((s) => s.reduceMotion)
+  const reduceMotion = useMotionPreferences()
   const wallpaperId = useSettings((s) => s.wallpaper)
   // Select only stable references from the store; deriving a fresh object inside
   // the selector makes useSyncExternalStore re-render forever (max update depth).
@@ -66,6 +68,16 @@ export function Desktop() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
+  useEffect(() => {
+    const fit = () => useWindows.getState().fitViewport()
+    window.addEventListener('resize', fit)
+    window.visualViewport?.addEventListener('resize', fit)
+    return () => {
+      window.removeEventListener('resize', fit)
+      window.visualViewport?.removeEventListener('resize', fit)
+    }
+  }, [])
+
   // restore user-added wallpapers from IndexedDB
   useEffect(() => {
     useCustomWallpapers.getState().load()
@@ -76,9 +88,9 @@ export function Desktop() {
     if (sessionStorage.getItem('gyan-os-welcomed')) return
     sessionStorage.setItem('gyan-os-welcomed', '1')
     const push = useNotifications.getState().push
-    fetch('/chat', { method: 'OPTIONS' })
-      .then((r) => {
-        if (r.ok || r.status === 405) push('Aizen is online', 'The model is live — open Aizen and chat.')
+    useAizen.getState().refresh()
+      .then(() => {
+        if (useAizen.getState().status === 'online') push('Aizen is online', 'The model is live — open Aizen and chat.')
         else push('Aizen is offline', 'The model runs locally on Gyan’s machine.')
       })
       .catch(() => push('Aizen is offline', 'The model runs locally on Gyan’s machine.'))

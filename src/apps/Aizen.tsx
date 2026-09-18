@@ -3,14 +3,16 @@ import data from '../data/aizen.json'
 import { AppIcon } from '../desktop/AppIcon'
 import { useIntent } from '../lib/useIntent'
 
+import { streamAizen, generationError, AizenRequestError } from '../lib/aizenClient'
+import { useAizenStatus, type AizenStatus as Status } from '../store/aizen'
+
 const TABS = ['Chat', 'Story', 'Model', 'Benchmark', 'Training', 'About'] as const
 type Tab = (typeof TABS)[number]
 
-type Status = 'checking' | 'online' | 'offline'
 
 export function AizenApp() {
   const [tab, setTab] = useState<Tab>('Chat')
-  const [status, setStatus] = useState<Status>('checking')
+  const { status, setStatus, refresh } = useAizenStatus()
 
   useIntent(
     'aizen',
@@ -19,21 +21,10 @@ export function AizenApp() {
     }, []),
   )
 
-  useEffect(() => {
-    let alive = true
-    // OPTIONS /chat: Flask answers 200 when up; the dev proxy answers 5xx when
-    // the backend is down; a static host answers 404.
-    fetch('/chat', { method: 'OPTIONS' })
-      .then((r) => alive && setStatus(r.ok || r.status === 405 ? 'online' : 'offline'))
-      .catch(() => alive && setStatus('offline'))
-    return () => {
-      alive = false
-    }
-  }, [])
 
   return (
     <div className="flex h-full flex-col">
-      <nav className="flex shrink-0 items-center gap-1 border-b border-black/5 px-3 py-2">
+      <nav className="app-tabs flex shrink-0 items-center gap-1 border-b border-black/5 px-3 py-2">
         {TABS.map((t) => (
           <button
             key={t}
@@ -46,11 +37,13 @@ export function AizenApp() {
           </button>
         ))}
         <div className="flex-1" />
-        <StatusPill status={status} />
+        <button onClick={() => void refresh()} disabled={status === 'checking'} aria-label="Check Aizen connection" className="shrink-0 rounded-full focus-visible:outline-2 focus-visible:outline-plum">
+          <StatusPill status={status} />
+        </button>
       </nav>
       <div className="min-h-0 flex-1 overflow-auto">
-        {tab === 'Chat' && <Chat status={status} onStatus={setStatus} />}
-        {tab === 'Story' && <Story status={status} onStatus={setStatus} />}
+        <div hidden={tab !== 'Chat'} className="h-full"><Chat status={status} onStatus={setStatus} /></div>
+        <div hidden={tab !== 'Story'} className="h-full"><Story status={status} onStatus={setStatus} /></div>
         {tab === 'Model' && <Model />}
         {tab === 'Benchmark' && <Benchmark />}
         {tab === 'Training' && <Training />}
@@ -79,6 +72,7 @@ function StatusPill({ status }: { status: Status }) {
 interface Msg {
   role: 'user' | 'aizen'
   text: string
+  failed?: boolean
 }
 
 const QUICK = [
@@ -101,6 +95,8 @@ function Chat({ status, onStatus }: { status: Status; onStatus: (s: Status) => v
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const requestRef = useRef<AbortController | null>(null)
+  useEffect(() => () => requestRef.current?.abort(), [])
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight })
@@ -108,47 +104,40 @@ function Chat({ status, onStatus }: { status: Status; onStatus: (s: Status) => v
 
   const send = async (text: string) => {
     const q = text.trim()
-    if (!q || busy) return
+    if (!q || busy || requestRef.current) return
     setInput('')
     // the backend accepts [[question, answer], ...] and fits as many recent turns as the 512 context allows
     const history: [string, string][] = []
     for (let i = 0; i + 1 < msgs.length; i += 2) {
       const u = msgs[i], a = msgs[i + 1]
-      if (u.role === 'user' && a.role === 'aizen' && a.text && !a.text.startsWith('⚠')) history.push([u.text, a.text])
+      if (u.role === 'user' && a.role === 'aizen' && a.text && !a.failed) history.push([u.text, a.text])
     }
     setMsgs((m) => [...m, { role: 'user', text: q }, { role: 'aizen', text: '' }])
     setBusy(true)
+    const request = new AbortController()
+    requestRef.current = request
     try {
-      const res = await fetch('/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: q, history: history.slice(-6) }),
-      })
-      if (!res.ok || !res.body) throw new Error(`status ${res.status}`)
-      onStatus('online')
-      const reader = res.body.getReader()
-      const dec = new TextDecoder()
-      for (;;) {
-        const { done, value } = await reader.read()
-        if (done) break
-        const chunk = dec.decode(value)
+      await streamAizen('/chat', { question: q, history: history.slice(-6) }, (chunk) => {
         setMsgs((m) => {
           const copy = [...m]
           copy[copy.length - 1] = { role: 'aizen', text: copy[copy.length - 1].text + chunk }
           return copy
         })
-      }
-    } catch {
-      onStatus('offline')
+      }, request.signal)
+      onStatus('online')
+    } catch (error) {
+      if (!request.signal.aborted && !(error instanceof AizenRequestError && error.status < 500)) onStatus('offline')
       setMsgs((m) => {
         const copy = [...m]
         copy[copy.length - 1] = {
           role: 'aizen',
-          text: '⚠ Aizen is offline. The model runs locally on Gyan’s machine and isn’t reachable right now.',
+          failed: true,
+          text: `${copy[copy.length - 1].text}${copy[copy.length - 1].text ? '\n\n' : ''}${generationError(error, request.signal.aborted)}`,
         }
         return copy
       })
     } finally {
+      requestRef.current = null
       setBusy(false)
     }
   }
@@ -208,12 +197,14 @@ function Chat({ status, onStatus }: { status: Status; onStatus: (s: Status) => v
       >
         <div className="flex items-center gap-2 rounded-xl border border-black/8 bg-white/60 px-3 py-2 focus-within:border-lavender-deep/50">
           <input
+            maxLength={2048}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask Aizen anything…"
             className="min-w-0 flex-1 bg-transparent text-[13.5px] outline-none placeholder:text-ink-soft/60"
             aria-label="Ask Aizen"
           />
+          {busy && <button type="button" onClick={() => requestRef.current?.abort()} className="px-2 py-1 text-xs text-ink-soft">Stop</button>}
           <button
             type="submit"
             disabled={busy || !input.trim()}
@@ -233,7 +224,7 @@ function OfflineCard() {
       <p className="text-[13px] font-semibold">Aizen is offline</p>
       <p className="mt-1 text-[12.5px] leading-relaxed text-ink-soft">
         The model isn&rsquo;t an API — it runs locally on Gyan&rsquo;s MacBook. When the backend is
-        up, this chat streams real generations from <code className="text-[11px]">aizen_phase5.pt</code>.
+        up, this chat streams real generations from <code className="text-[11px]">aizen_phase8.pt</code>.
         Meanwhile, the Model and Benchmark tabs show what it can do.
       </p>
     </div>
@@ -245,31 +236,25 @@ function OfflineCard() {
 function Story({ status, onStatus }: { status: Status; onStatus: (s: Status) => void }) {
   const [prompt, setPrompt] = useState('Once upon a time')
   const [out, setOut] = useState('')
+  const requestRef = useRef<AbortController | null>(null)
+  useEffect(() => () => requestRef.current?.abort(), [])
   const [busy, setBusy] = useState(false)
 
   const tell = async () => {
-    if (busy) return
+    if (busy || requestRef.current) return
     setOut('')
     setBusy(true)
+    const request = new AbortController()
+    requestRef.current = request
     try {
-      const res = await fetch('/story', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: prompt.trim() || 'Once upon a time', tokens: 220, temperature: 0.85 }),
-      })
-      if (!res.ok || !res.body) throw new Error(`status ${res.status}`)
+      await streamAizen('/story', { prompt: prompt.trim() || 'Once upon a time', tokens: 220, temperature: 0.85 },
+        (chunk) => setOut((text) => text + chunk), request.signal)
       onStatus('online')
-      const reader = res.body.getReader()
-      const dec = new TextDecoder()
-      for (;;) {
-        const { done, value } = await reader.read()
-        if (done) break
-        setOut((t) => t + dec.decode(value))
-      }
-    } catch {
-      onStatus('offline')
-      setOut('⚠ The storyteller is offline — it runs locally on Gyan’s machine.')
+    } catch (error) {
+      if (!request.signal.aborted && !(error instanceof AizenRequestError && error.status < 500)) onStatus('offline')
+      setOut((text) => `${text}${text ? '\n\n' : ''}${generationError(error, request.signal.aborted)}`)
     } finally {
+      requestRef.current = null
       setBusy(false)
     }
   }
@@ -277,6 +262,7 @@ function Story({ status, onStatus }: { status: Status; onStatus: (s: Status) => 
   return (
     <div className="mx-auto max-w-xl px-6 py-6">
       <h1 className="text-xl font-semibold tracking-tight">Aizen Storyteller</h1>
+      {busy && <button onClick={() => requestRef.current?.abort()} className="mt-2 rounded-lg border border-black/10 px-3 py-2 text-xs">Stop generation</button>}
       <p className="mt-1 text-[12.5px] leading-relaxed text-ink-soft">
         The same 40M weights <em>before</em> the task fine-tune — a pure language model that only ever read
         TinyStories. Give it an opening, not a question.
@@ -288,6 +274,7 @@ function Story({ status, onStatus }: { status: Status; onStatus: (s: Status) => 
       )}
       <div className="mt-4 flex items-center gap-2 rounded-xl border border-black/8 bg-white/60 px-3 py-2 focus-within:border-lavender-deep/50">
         <input
+            maxLength={2048}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && tell()}
